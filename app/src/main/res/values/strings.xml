@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">TeamprojectV2</string>
+    <string name="title_activity_main2">Welcome</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Page %1$d</string>
+    <string name="button_send">login</string>
+    <string name="edit_message">Enter your account ID</string>
+    <string name="edit_password">Enter account password</string>
+    <string name="Account_ID">Account ID:</string>
+    <string name="Account_password">Password:</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="Contact_admin">Request Account</string>
+</resources>
