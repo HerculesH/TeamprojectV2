@@ -5,14 +5,18 @@ package com.example.herchja.teamprojectv2;
  */
 
 public class Message {
+    private int Id;
     private int UserId;
     private int SendId;
+    private int GroupId;
     private String text;
     private String state;
 
-    public Message(int userId, int sendId, String text, String state) {
+    public Message(int id, int userId, int sendId, int groupId, String text, String state) {
+        Id = id;
         UserId = userId;
         SendId = sendId;
+        GroupId = groupId;
         this.text = text;
         this.state = state;
     }

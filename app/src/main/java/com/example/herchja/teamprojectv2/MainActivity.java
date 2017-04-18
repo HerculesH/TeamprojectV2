@@ -1,11 +1,13 @@
 package com.example.herchja.teamprojectv2;
 
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 
 import com.example.herchja.teamprojectv2.R;
 
@@ -21,6 +23,7 @@ public class MainActivity extends FragmentActivity {
         pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
         pager.setCurrentItem(1);
     }
+
 
     private class MyPagerAdapter extends FragmentPagerAdapter {
 

@@ -171,7 +171,7 @@ public class DatabaseHandler {
                 if (userTo == id) { // messages that are being sent to the id
                     String text = rs.getString("message");
                     String state = "0";
-                    Message newMessage = new Message(userFrom, userTo, text, state);
+                    Message newMessage = new Message(id, userFrom, userTo, 0, text, state);
                     allMessages.add(newMessage);
                 } else {
                     continue;
