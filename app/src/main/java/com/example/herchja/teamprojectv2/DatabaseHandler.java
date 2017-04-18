@@ -192,18 +192,49 @@ public class DatabaseHandler {
      * @param idFrom    The id of the current using (who it's from)
      * @param message   The message itself.
      */
-    public void sendMessage(int idTo, int idFrom, String message) {
+    public boolean sendMessage(int idTo, int idFrom, String message) {
 
         String query = "INSERT INTO Messages(messageTo, messageFrom, message) VALUES (" +
                 idTo + "," + idFrom + "," + message + ")";
+        if (executeInsert(query)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     *  This will register a user into the database.
+     * @param username      Username
+     * @param hashPass      Password (After it has been hashed)
+     * @param valid         Valid bit, always assume its 0 first.
+     * @return              True if there are no errors.
+     */
+    public boolean registerUser(String username, byte[] hashPass, int valid) {
+        String query = "INSERT INTO Users(username, password, valid) VALUES (" +
+                username + "," + hashPass + "," + valid + ")";
+        if (executeInsert(query)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * This function will execute any inserting queries for the database.
+     * @param query     The query to execute
+     * @return          True if it works, false if there's an error.
+     */
+    private boolean executeInsert(String query) {
         try {
             Statement stmt = this.connection.createStatement();
             stmt.executeQuery(query);
             stmt.close();
-
         } catch (Exception e) {
-            System.out.println("Error executing Statement!" + e.getMessage());
+            System.out.println("Error executing Statement: " + query + "\nError: " + e.getMessage());
+            return false;
         }
+        return true;
     }
 
     /**
