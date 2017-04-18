@@ -1,17 +1,24 @@
 package com.example.herchja.teamprojectv2;
 
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+
+import java.util.ArrayList;
 
 import com.example.herchja.teamprojectv2.R;
 
 public class MainActivity extends FragmentActivity {
+
+    static public ViewPager pager;
+    static public ArrayList<String> listItems = new ArrayList<String>();
+
+    static public String eID;
 
 
     @Override
@@ -19,7 +26,11 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ViewPager pager = (ViewPager) findViewById(R.id.viewPager);
+        if(listItems.isEmpty()) {
+            listItems.add("Add contact");
+        }
+
+        pager = (ViewPager) findViewById(R.id.viewPager);
         pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
         pager.setCurrentItem(1);
     }
@@ -51,4 +62,6 @@ public class MainActivity extends FragmentActivity {
             return 3;
         }
     }
+
+
 }
