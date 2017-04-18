@@ -133,6 +133,60 @@ public class DatabaseHandler {
     }
 
     /**
+     *  This will get the password stored in the database.
+     * @param userID    username to check
+     * @return          hashed password stored in database
+     */
+    public byte[] getPassword(String userID) {
+        byte[] pass = new byte[30];
+        String query = "SELECT password FROM Users WHERE userid=" + userID; // select all users from username
+        try {
+            Statement stmt = this.connection.createStatement(); // connect to database
+            stmt.executeQuery(query);                           // execute query
+            ResultSet rs = stmt.getResultSet();                 // get results
+            pass = rs.getBytes("password");
+            stmt.close();   // close connections
+            rs.close();
+        } catch (Exception e) {
+            System.out.println("Error executing statement!");
+        }
+        return pass;
+    }
+
+    /**
+     * getMessages will return all messages that the userid has to read.
+     * @param id    user to get messages to be read.
+     * @return      an arraylist of messages the user has to read.
+     */
+    public ArrayList<Message> getMessages(int id) {
+        ArrayList<Message> allMessages = new ArrayList<>();
+        String query = "SELECT * FROM Messages";
+        try {
+            Statement stmt = this.connection.createStatement();
+            stmt.executeQuery(query);
+            ResultSet rs = stmt.getResultSet();
+            while (rs.next()) {
+                int userFrom = rs.getInt("messageFrom");
+                int userTo = rs.getInt("messageTo");
+                if (userTo == id) { // messages that are being sent to the id
+                    String text = rs.getString("message");
+                    String state = "0";
+                    Message newMessage = new Message(userFrom, userTo, text, state);
+                    allMessages.add(newMessage);
+                } else {
+                    continue;
+                }
+            }
+            stmt.close();
+            rs.close();
+        } catch (Exception e) {
+            System.out.println("Error executing Statement!");
+        }
+        return allMessages;
+
+    }
+
+    /**
      * This will check a password with its expected hash, and return true or false if the hash and the
      * input password matches.
      *
