@@ -89,7 +89,7 @@ public class DatabaseHandler {
             stmt.executeQuery(query);                           // execute query
             ResultSet rs = stmt.getResultSet();                 // get results
             while (rs.next()) {  // while there are things to read
-                users.add(rs.getString("usernames")); // add to arraylist
+                users.add(rs.getString("username")); // add to arraylist
             }
             stmt.close();   // close connections
             rs.close();
@@ -180,10 +180,30 @@ public class DatabaseHandler {
             stmt.close();
             rs.close();
         } catch (Exception e) {
-            System.out.println("Error executing Statement!");
+            System.out.println("Error executing Statement!" + e.getMessage());
         }
         return allMessages;
 
+    }
+
+    /**
+     * This will send a message to the database for the users to read.
+     * @param idTo      The id the user will be sending to
+     * @param idFrom    The id of the current using (who it's from)
+     * @param message   The message itself.
+     */
+    public void sendMessage(int idTo, int idFrom, String message) {
+
+        String query = "INSERT INTO Messages(messageTo, messageFrom, message) VALUES (" +
+                idTo + "," + idFrom + "," + message + ")";
+        try {
+            Statement stmt = this.connection.createStatement();
+            stmt.executeQuery(query);
+            stmt.close();
+
+        } catch (Exception e) {
+            System.out.println("Error executing Statement!" + e.getMessage());
+        }
     }
 
     /**
