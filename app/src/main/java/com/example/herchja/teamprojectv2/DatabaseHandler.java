@@ -291,6 +291,7 @@ public class DatabaseHandler {
              }
          } catch (Exception e) {
              System.out.println("Error executing statement!");
+             return false;
          }
     	
     }
