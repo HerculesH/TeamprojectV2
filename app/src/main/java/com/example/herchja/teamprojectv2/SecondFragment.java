@@ -75,7 +75,7 @@ public class SecondFragment extends Fragment {
                 else if(position == 1)
                 {
                     MainActivity.pager.setCurrentItem(0,true);
-                    Toast.makeText(getActivity(), "First item", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "New message!", Toast.LENGTH_SHORT).show();
                 }
                 else if (position == 2)
                 {

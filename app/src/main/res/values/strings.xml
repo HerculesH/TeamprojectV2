@@ -8,13 +8,11 @@
     <string name="edit_password">Enter account password</string>
     <string name="Account_ID">Account ID:</string>
     <string name="Account_password">Password:</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="Contact_admin">Request Account</string>
     <string name="Sendmgs">Send</string>
     <string name="SendmsgID">Add recipent id</string>
-    <string name="encryptmsg">Add encrypt code</string>
+    <string name="encryptmsg">Add encryption to message</string>
     <string name="MsgBox">Input your message</string>
     <string name="Add_contact">Add</string>
     <string name="Employee_id">Input employee id</string>

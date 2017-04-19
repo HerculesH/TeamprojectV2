@@ -17,6 +17,7 @@ public class MainActivity extends FragmentActivity {
 
     static public ViewPager pager;
     static public ArrayList<String> listItems = new ArrayList<String>();
+    static public ArrayList<String> msgItems = new ArrayList<String>();
 
     static public String eID;
 
@@ -28,6 +29,10 @@ public class MainActivity extends FragmentActivity {
 
         if(listItems.isEmpty()) {
             listItems.add("Add contact");
+        }
+
+        if(msgItems.isEmpty()) {
+            msgItems.add("New message! - Monica");
         }
 
         pager = (ViewPager) findViewById(R.id.viewPager);
