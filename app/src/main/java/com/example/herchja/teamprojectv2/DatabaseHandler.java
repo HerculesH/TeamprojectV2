@@ -262,4 +262,36 @@ public class DatabaseHandler {
         }
         return true;
     }
+    
+    /**
+     * Takes username and password from input and checks if the user exist and if the 
+     * password matches and returnsa boolean.
+     */
+    public boolean Login(String userID, char[] password){
+    	 String query = "SELECT usernamr FROM Users WHERE userid=" + userID;
+    	 byte[] salt = getNextSalt();
+    	 byte[] hashPass = getPassword(userID);
+         try {
+             Statement stmt = this.connection.createStatement(); // connect to database
+             stmt.executeQuery(query);                           // execute query
+             ResultSet rs = stmt.getResultSet();                 // get results
+             if(!rs.isBeforeFirst()){                            // checks if user is registered
+            	 //System.out.println("User not found");
+            	 stmt.close();                                       
+                 rs.close();
+            	 return false;
+             }
+             stmt.close();                                       // close connections
+             rs.close();
+             if(isExpectedPassword(password, salt, hashPass))    //check if correct password
+            	 return true;
+             else {
+            	//System.out.println("Incorrect password");
+            	 return false;                                   //rutuns false if incorrect password
+             }
+         } catch (Exception e) {
+             System.out.println("Error executing statement!");
+         }
+    	
+    }
 }
