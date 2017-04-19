@@ -2,6 +2,7 @@ package com.example.herchja.teamprojectv2;
 
 import android.content.Intent;
 import android.preference.EditTextPreference;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,10 +11,15 @@ import android.widget.Toast;
 import java.util.*;
 import com.kosalgeek.asynctask.AsyncResponse;
 import com.kosalgeek.asynctask.PostResponseAsyncTask;
+import java.sql.*;
+import java.security.*;
+
 
 public class LoginActivity extends AppCompatActivity implements AsyncResponse{
 
     private EditText Username, Password;
+    DatabaseHandler db = DatabaseHandler.getInstance();
+    //ArrayList<Message> mes = db.getMessages(1141);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

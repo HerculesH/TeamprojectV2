@@ -23,6 +23,7 @@ public class DatabaseHandler {
     private static final int ITERATIONS = 10000;
     private static final int KEY_LENGTH = 256;
     private Connection connection;
+    static DatabaseHandler instance;
 
     /**
      * Domain name for our project:
@@ -39,6 +40,12 @@ public class DatabaseHandler {
         } catch (Exception e) { System.out.println("Connection Failed!:\n" + e.getMessage()); }
     }
 
+    public static DatabaseHandler getInstance(){
+        if(instance == null){
+            instance = new DatabaseHandler("", "semaster", "3ab7jz24s");
+        }
+        return instance;
+    }
 
     /**
      * this will close the connection of the database handler.
