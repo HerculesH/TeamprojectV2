@@ -18,7 +18,7 @@ public class MainActivity extends FragmentActivity {
     static public ViewPager pager;
     static public ArrayList<String> listItems = new ArrayList<String>();
     static public ArrayList<String> msgItems = new ArrayList<String>();
-
+    static public DatabaseHandler db = new DatabaseHandler("","semaster","3ab7jz24s");
     static public String eID;
 
 
@@ -29,10 +29,11 @@ public class MainActivity extends FragmentActivity {
 
         if(listItems.isEmpty()) {
             listItems.add("Add contact");
+            listItems.toArray(db.getUsers().toArray());
         }
 
         if(msgItems.isEmpty()) {
-            msgItems.add("New message! - Monica");
+
         }
 
         pager = (ViewPager) findViewById(R.id.viewPager);

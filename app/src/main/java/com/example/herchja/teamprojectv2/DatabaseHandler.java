@@ -33,11 +33,12 @@ public class DatabaseHandler {
      * @param username      username. Only private users should know this
      * @param password      password. Only private users should know this.
      */
-    private DatabaseHandler(String domain, String username, String password) {
+    public DatabaseHandler(String domain, String username, String password) {
         try {
             this.connection = DriverManager.getConnection("jdbc:mysql://" + "se-team4-project.cyl2fljhshrg.us-west-2.rds.amazonaws.com:3306/se4_mydb",
                     username, password);
         } catch (Exception e) { System.out.println("Connection Failed!:\n" + e.getMessage()); }
+
     }
 
     public static DatabaseHandler getInstance(){
