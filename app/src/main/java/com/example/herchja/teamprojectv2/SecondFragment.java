@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.widget.ToggleButton;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -37,7 +38,7 @@ public class SecondFragment extends Fragment {
         tv.setText(getArguments().getString("msg"));
 
         ListView listView = (ListView) v.findViewById(R.id.mainMenu);
-        final ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(
+        final ArrayAdapter<User> listViewAdapter = new ArrayAdapter<User>(
                 getActivity(),android.R.layout.simple_list_item_1,MainActivity.listItems);
         listView.setAdapter(listViewAdapter);
 
@@ -60,8 +61,11 @@ public class SecondFragment extends Fragment {
                             numContacts++;
                             numberOfContacts.setText(numContacts + " Contacts");
                             final EditText name = (EditText) view.findViewById(R.id.eName);
-                            String id = name.getText().toString();
-                            listViewAdapter.add(id);
+                            String nameUser = name.getText().toString();
+                            final EditText id = (EditText) view.findViewById(R.id.eID);
+                            String idUser = id.getText().toString();
+                            MainActivity.eUser = new User(nameUser,idUser);
+                            listViewAdapter.add(MainActivity.eUser);
                         }
                     });
 
@@ -72,22 +76,73 @@ public class SecondFragment extends Fragment {
                     });
                     alertDialog.show();
                 }
-                else if(position == 1)
+                else if(position != 0)
                 {
-                    MainActivity.pager.setCurrentItem(0,true);
-                    Toast.makeText(getActivity(), "New message!", Toast.LENGTH_SHORT).show();
-                }
-                else if (position == 2)
-                {
-                    Toast.makeText(getActivity(), "Second item", Toast.LENGTH_SHORT).show();
-                }
-                else if (position == 3)
-                {
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(v.getContext());
+                    LayoutInflater factory = LayoutInflater.from(v.getContext());
+                    final View view = factory.inflate(R.layout.fragment_detailed_contact, null);
 
+                    MainActivity.userChooser = position;
+                    User grab = MainActivity.listItems.get(MainActivity.userChooser);
+                    final EditText setName = (EditText) view.findViewById(R.id.viewCname);
+                    setName.setText(grab.getUsername());
+                    final EditText setId = (EditText) view.findViewById(R.id.viewCid);
+                    setId.setText(grab.getId());
+                    setName.setFocusable(false);
+                    setId.setFocusable(false);
 
-                    Toast.makeText(getActivity(), "Third item", Toast.LENGTH_SHORT).show();
+                    ToggleButton edit = (ToggleButton) view.findViewById(R.id.toggleButton2);
+                    edit.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View view) {
+
+                            if(edit.isChecked())
+                            {
+                                setName.setFocusableInTouchMode(true);
+                                setId.setFocusableInTouchMode(true);
+                            }
+                            else
+                            {
+                                setName.setFocusable(false);
+                                setId.setFocusable(false);
+                            }
+                        }
+                    });
+
+                    alertDialog.setView(view);
+                    alertDialog.setCancelable(true);
+                    alertDialog.setPositiveButton("Send Message", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            final EditText transfer = (EditText) ThirdFragment.v.findViewById(R.id.editText6);
+                            transfer.setText(grab.getId());
+                            MainActivity.pager.setCurrentItem(2,true);
+                        }
+                    });
+
+                    alertDialog.setNeutralButton("Delete Contact", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            MainActivity.listItems.remove(position);
+                            numContacts--;
+                            numberOfContacts.setText(numContacts + " Contacts");
+                            listViewAdapter.notifyDataSetChanged();
+
+                        }
+                    });
+
+                    alertDialog.setNegativeButton("Done", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            MainActivity.listItems.get(MainActivity.userChooser).setUsername(setName.getText().toString());
+                            MainActivity.listItems.get(MainActivity.userChooser).setId(setId.getText().toString());
+                            listViewAdapter.notifyDataSetChanged();
+                            dialog.dismiss();
+                        }
+                    });
+                    alertDialog.show();
 
                 }
+
 
 
             }

@@ -25,14 +25,18 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
     }
 
     @Override
     public void processFinish(String s) {
-        if(s.endsWith("success")){
+        if(s.endsWith("success") == false){
+
             Toast.makeText(this, "Successful Login", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
+
+
         }
         else {
             Toast.makeText(this, "Failed Login Attempt", Toast.LENGTH_LONG).show();

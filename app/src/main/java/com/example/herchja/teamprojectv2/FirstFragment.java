@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 public class FirstFragment extends Fragment {
 
+    public AlertDialog.Builder alertDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -30,6 +32,11 @@ public class FirstFragment extends Fragment {
         TextView tv = (TextView) v.findViewById(R.id.tvFragFirst);
         tv.setText(getArguments().getString("msg"));
 
+        if(MainActivity.msgItems.isEmpty() != true)
+        {
+            Toast.makeText(getActivity(), "New message!", Toast.LENGTH_SHORT).show();
+        }
+
         final ListView messageList = (ListView) v.findViewById(R.id.msgList);
         final ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(
                 getActivity(),android.R.layout.simple_list_item_1,MainActivity.msgItems);
@@ -40,18 +47,37 @@ public class FirstFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, final long id) {
 
-                if (position == 0) {
+                if (position != 99) {
 
-                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(v.getContext());
+                    alertDialog = new AlertDialog.Builder(v.getContext());
                     LayoutInflater factory = LayoutInflater.from(v.getContext());
                     final View view = factory.inflate(R.layout.fragment_msg_viewer, null);
+
+                    TextView cd = (TextView) view.findViewById(R.id.cdTimer);
+                    TextView txt = (TextView) view.findViewById(R.id.MsgText);
+
+                    new CountDownTimer(10000, 1000) {
+
+                        public void onTick(long millisUntilFinished) {
+                            cd.setText("seconds remaining: " + millisUntilFinished / 1000);
+                        }
+
+                        public void onFinish() {
+
+                                cd.setText("Message erased");
+                                txt.setText("");
+                                listViewAdapter.notifyDataSetChanged();
+
+                        }
+                    }.start();
+
 
                     alertDialog.setView(view);
                     alertDialog.setCancelable(true);
                     alertDialog.setPositiveButton("Done", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
 
-                            MainActivity.msgItems.remove(0);
+                            MainActivity.msgItems.remove(position);
                             listViewAdapter.notifyDataSetChanged();
                             numberOfContacts.setText(MainActivity.msgItems.size() + " Messages");
 
@@ -64,22 +90,6 @@ public class FirstFragment extends Fragment {
                         }
                     });
                     alertDialog.show();
-                }
-                else if(position == 1)
-                {
-                    MainActivity.pager.setCurrentItem(0,true);
-                    Toast.makeText(getActivity(), "First item", Toast.LENGTH_SHORT).show();
-                }
-                else if (position == 2)
-                {
-                    Toast.makeText(getActivity(), "Second item", Toast.LENGTH_SHORT).show();
-                }
-                else if (position == 3)
-                {
-
-
-                    Toast.makeText(getActivity(), "Third item", Toast.LENGTH_SHORT).show();
-
                 }
 
 

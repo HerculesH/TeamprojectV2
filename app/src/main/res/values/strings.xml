@@ -12,11 +12,13 @@
     <string name="Contact_admin">Request Account</string>
     <string name="Sendmgs">Send</string>
     <string name="SendmsgID">Add recipent id</string>
-    <string name="encryptmsg">Add encryption to message</string>
+    <string name="encryptmsg">Set a message timer</string>
     <string name="MsgBox">Input your message</string>
     <string name="Add_contact">Add</string>
     <string name="Employee_id">Input employee id</string>
     <string name="Employee_name">Input employee name</string>
     <string name="Employee_email">Input Employee email</string>
     <string name="contacts_number"># contacts</string>
+    <string name="viewDetailedName">Contact name</string>
+    <string name="viewDetailedId">Contact ID</string>
 </resources>

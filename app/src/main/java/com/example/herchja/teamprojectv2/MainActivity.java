@@ -16,10 +16,12 @@ import com.example.herchja.teamprojectv2.R;
 public class MainActivity extends FragmentActivity {
 
     static public ViewPager pager;
-    static public ArrayList<String> listItems = new ArrayList<String>();
+    static public ArrayList<User> listItems = new ArrayList<User>();
     static public ArrayList<String> msgItems = new ArrayList<String>();
+    static public ArrayList<String> groupMsg = new ArrayList<>();
     static public DatabaseHandler db = new DatabaseHandler("","semaster","3ab7jz24s");
-    static public String eID;
+    static public User eUser;
+    static public int userChooser;
 
 
     @Override
@@ -28,12 +30,13 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
 
         if(listItems.isEmpty()) {
-            listItems.add("Add contact");
-            listItems.toArray(db.getUsers().toArray());
+            eUser = new User("+ Add contact","");
+            listItems.add(eUser);
+
         }
 
         if(msgItems.isEmpty()) {
-
+            msgItems.add("new message");
         }
 
         pager = (ViewPager) findViewById(R.id.viewPager);

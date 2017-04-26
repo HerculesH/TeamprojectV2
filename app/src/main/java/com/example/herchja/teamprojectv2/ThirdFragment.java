@@ -26,10 +26,11 @@ public class ThirdFragment extends Fragment {
     private EditText encryptbox;
     private EditText msg;
     private TextView msgview;
+    public static View v;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_third, container, false);
+        v = inflater.inflate(R.layout.fragment_third, container, false);
 
         msg = (EditText) v.findViewById(R.id.editText3);
         msgview = (TextView) v.findViewById(R.id.textView5);

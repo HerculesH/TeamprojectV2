@@ -8,21 +8,41 @@ import java.util.ArrayList;
 
 public class User {
     private String username;
-    private int id;
+    private String id;
     ArrayList<String> messages;
 
-    public User(String username, int id) {
+    public User(String username, String id) {
         this.username = username;
         this.id = id;
         //messages = getMessages(id);
+    }
+
+    public String toString()
+    {
+        if(this.getId() != "") {
+            return this.getUsername() + " <ID: " + this.getId() + ">";
+        }
+        else
+        {
+            return this.getUsername();
+        }
     }
 
     public String getUsername() {
         return username;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
+    }
+
+    public void setUsername(String name) {
+        this.username = name;
+    }
+
+    public void setId(String id) {
+
+        this.id = id;
     }
 
     public ArrayList<String> getMessages() {
