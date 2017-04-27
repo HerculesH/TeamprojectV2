@@ -27,8 +27,7 @@ import static android.widget.AdapterView.*;
 
 public class SecondFragment extends Fragment {
 
-    int numContacts = 0;
-
+    int numContacts = MainActivity.listItems.size() - 1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,15 +60,17 @@ public class SecondFragment extends Fragment {
                     alertDialog.setPositiveButton("Add", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
 
-                            numContacts++;
-                            numberOfContacts.setText(numContacts + " Contacts");
+
                             final EditText name = (EditText) view.findViewById(R.id.eName);
                             String nameUser = name.getText().toString();
                             final EditText id = (EditText) view.findViewById(R.id.eID);
                             String idUser = id.getText().toString();
                             MainActivity.eUser = new User(nameUser,idUser);
                             listViewAdapter.add(MainActivity.eUser);
+                            listViewAdapter.notifyDataSetChanged();
                             MainActivity.pref.saveArray(MainActivity.listItems,MainActivity.mPrefs);
+                            numContacts = MainActivity.listItems.size() - 1;
+                            numberOfContacts.setText(numContacts + " Contacts");
 
                         }
                     });
@@ -109,6 +110,9 @@ public class SecondFragment extends Fragment {
                             }
                             else
                             {
+                                grab.setUsername(setName.getText().toString());
+                                grab.setId(setId.getText().toString());
+                                MainActivity.pref.saveArray(MainActivity.listItems,MainActivity.mPrefs);
                                 setName.setFocusable(false);
                                 setId.setFocusable(false);
                             }
@@ -119,7 +123,6 @@ public class SecondFragment extends Fragment {
                     alertDialog.setCancelable(true);
                     alertDialog.setPositiveButton("Send Message", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-
                             final EditText transfer = (EditText) ThirdFragment.v.findViewById(R.id.editText6);
                             transfer.setText(grab.getId());
                             MainActivity.pager.setCurrentItem(2,true);
@@ -129,7 +132,8 @@ public class SecondFragment extends Fragment {
                     alertDialog.setNeutralButton("Delete Contact", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             MainActivity.listItems.remove(position);
-                            numContacts--;
+                            MainActivity.pref.saveArray(MainActivity.listItems,MainActivity.mPrefs);
+                            numContacts = MainActivity.listItems.size() - 1;
                             numberOfContacts.setText(numContacts + " Contacts");
                             listViewAdapter.notifyDataSetChanged();
 
