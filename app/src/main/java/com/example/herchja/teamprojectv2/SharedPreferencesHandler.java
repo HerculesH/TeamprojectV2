@@ -1,8 +1,9 @@
 package com.example.herchja.teamprojectv2;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,16 +14,16 @@ import java.util.Set;
 
 public class SharedPreferencesHandler {
 
-    private SharedPreferences.Editor editor;
-    private SharedPreferences sharedPref;
-
-    public void saveArray(ArrayList<String> list, Activity a)
+    public static Set<String> saveArray(ArrayList<String> u, Context c)
     {
-        sharedPref = a.getPreferences(a.MODE_PRIVATE);
-        editor = a.getPreferences(a.MODE_PRIVATE).edit();
+        Set<String> saveSetGC = new HashSet<String>(u);
 
-        editor.putString("yourKey", list.toString());
+        SharedPreferences pref = c.getApplicationContext().getSharedPreferences("MyPref", 0);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putStringSet("MySet", saveSetGC);
         editor.commit();
+
+        return saveSetGC;
     }
 
 

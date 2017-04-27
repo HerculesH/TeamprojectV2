@@ -45,7 +45,7 @@ public class FirstFragment extends Fragment {
         messageList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v,
-                                    int position, final long id) {
+                                    final int position, final long id) {
 
                 if (position != 99) {
 
@@ -53,8 +53,8 @@ public class FirstFragment extends Fragment {
                     LayoutInflater factory = LayoutInflater.from(v.getContext());
                     final View view = factory.inflate(R.layout.fragment_msg_viewer, null);
 
-                    TextView cd = (TextView) view.findViewById(R.id.cdTimer);
-                    TextView txt = (TextView) view.findViewById(R.id.MsgText);
+                    final TextView cd = (TextView) view.findViewById(R.id.cdTimer);
+                    final TextView txt = (TextView) view.findViewById(R.id.MsgText);
 
                     new CountDownTimer(10000, 1000) {
 

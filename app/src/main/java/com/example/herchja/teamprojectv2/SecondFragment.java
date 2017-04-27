@@ -45,7 +45,7 @@ public class SecondFragment extends Fragment {
         listView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v,
-                                    int position, final long id) {
+                                    final int position, final long id) {
 
                 if (position == 0) {
 
@@ -83,7 +83,7 @@ public class SecondFragment extends Fragment {
                     final View view = factory.inflate(R.layout.fragment_detailed_contact, null);
 
                     MainActivity.userChooser = position;
-                    User grab = MainActivity.listItems.get(MainActivity.userChooser);
+                    final User grab = MainActivity.listItems.get(MainActivity.userChooser);
                     final EditText setName = (EditText) view.findViewById(R.id.viewCname);
                     setName.setText(grab.getUsername());
                     final EditText setId = (EditText) view.findViewById(R.id.viewCid);
@@ -91,7 +91,7 @@ public class SecondFragment extends Fragment {
                     setName.setFocusable(false);
                     setId.setFocusable(false);
 
-                    ToggleButton edit = (ToggleButton) view.findViewById(R.id.toggleButton2);
+                    final ToggleButton edit = (ToggleButton) view.findViewById(R.id.toggleButton2);
                     edit.setOnClickListener(new View.OnClickListener() {
 
                         @Override
