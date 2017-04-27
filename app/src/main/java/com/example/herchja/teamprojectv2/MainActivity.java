@@ -1,5 +1,6 @@
 package com.example.herchja.teamprojectv2;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -22,6 +23,8 @@ public class MainActivity extends FragmentActivity {
     static public DatabaseHandler db = new DatabaseHandler("","semaster","3ab7jz24s");
     static public User eUser;
     static public int userChooser;
+    static public SharedPreferences mPrefs;
+    static public SharedPreferencesHandler pref = new SharedPreferencesHandler();
 
 
     @Override
@@ -29,10 +32,17 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mPrefs = getPreferences(MODE_PRIVATE);
+
         if(listItems.isEmpty()) {
+
             eUser = new User("+ Add contact","");
             listItems.add(eUser);
 
+        }
+        else
+        {
+            listItems = pref.getArray(mPrefs);
         }
 
         if(msgItems.isEmpty()) {

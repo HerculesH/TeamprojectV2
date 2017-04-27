@@ -3,6 +3,9 @@ package com.example.herchja.teamprojectv2;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -14,17 +17,25 @@ import java.util.Set;
 
 public class SharedPreferencesHandler {
 
-    public static Set<String> saveArray(ArrayList<String> u, Context c)
+    public static SharedPreferences.Editor prefsEditor;
+    public static ArrayList<User> usave = new ArrayList<User>();
+    Gson gson;
+
+    public void saveArray(ArrayList<User> u, SharedPreferences p)
     {
-        Set<String> saveSetGC = new HashSet<String>(u);
-
-        SharedPreferences pref = c.getApplicationContext().getSharedPreferences("MyPref", 0);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putStringSet("MySet", saveSetGC);
-        editor.commit();
-
-        return saveSetGC;
+        prefsEditor = p.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(u);
+        prefsEditor.putString("MyObject", json);
+        prefsEditor.commit();
     }
 
+    public ArrayList<User> getArray(SharedPreferences p)
+    {
+        gson = new Gson();
+        String json = p.getString("MyObject", "");
+        usave = gson.fromJson(json, new TypeToken<ArrayList<User>>() {}.getType());
+        return usave;
+    }
 
 }

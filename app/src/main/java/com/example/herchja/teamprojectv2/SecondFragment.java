@@ -1,5 +1,6 @@
 package com.example.herchja.teamprojectv2;
 
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.content.Context;
 import android.os.Bundle;
@@ -21,11 +22,13 @@ import android.widget.ToggleButton;
 import java.util.Collection;
 import java.util.Collections;
 
+import static android.content.Context.MODE_PRIVATE;
 import static android.widget.AdapterView.*;
 
 public class SecondFragment extends Fragment {
 
     int numContacts = 0;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -66,6 +69,8 @@ public class SecondFragment extends Fragment {
                             String idUser = id.getText().toString();
                             MainActivity.eUser = new User(nameUser,idUser);
                             listViewAdapter.add(MainActivity.eUser);
+                            MainActivity.pref.saveArray(MainActivity.listItems,MainActivity.mPrefs);
+
                         }
                     });
 
