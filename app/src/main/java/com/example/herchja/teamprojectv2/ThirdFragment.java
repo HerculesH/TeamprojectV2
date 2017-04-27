@@ -22,44 +22,48 @@ import org.w3c.dom.Text;
 public class ThirdFragment extends Fragment {
 
     private Button sendmsg;
-    private ToggleButton encrypt;
-    private EditText encryptbox;
+    private ToggleButton ToggleTimer;
+    private EditText Timerbox;
     private EditText msg;
-    private TextView msgview;
+    private EditText subject;
     public static View v;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_third, container, false);
 
-        msg = (EditText) v.findViewById(R.id.editText3);
-        msgview = (TextView) v.findViewById(R.id.textView5);
-        encryptbox = (EditText) v.findViewById(R.id.editText5);
+        subject = (EditText) v.findViewById(R.id.SubBox);
+        msg = (EditText) v.findViewById(R.id.MsgBox);
+        Timerbox = (EditText) v.findViewById(R.id.editText5);
 
         sendmsg = (Button) v.findViewById(R.id.button);
         sendmsg.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-                msgview.append(msg.getText() + System.getProperty("line.separator"));
+
+                //send message implementation
+                msg.setText("");
+                subject.setText("");
+
             }
         });
 
-        encryptbox.setFocusable(false);
+        Timerbox.setFocusable(false);
 
-        encrypt = (ToggleButton) v.findViewById(R.id.toggleButton);
-        encrypt.setOnClickListener(new View.OnClickListener() {
+        ToggleTimer = (ToggleButton) v.findViewById(R.id.toggleButton);
+        ToggleTimer.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
 
-                if(encrypt.isChecked())
+                if(ToggleTimer.isChecked())
                 {
-                    encryptbox.setFocusableInTouchMode(true);
+                    Timerbox.setFocusableInTouchMode(true);
                 }
                 else
                 {
-                    encryptbox.setFocusable(false);
+                    ToggleTimer.setFocusable(false);
                 }
             }
         });
