@@ -27,6 +27,7 @@ public class MainActivity extends FragmentActivity {
     static public SharedPreferencesHandler pref = new SharedPreferencesHandler();
 
 
+
     Bundle bundle = getIntent().getExtras();
     private String value = bundle.getString("ID");
     private String value2 = bundle.getString("User");
