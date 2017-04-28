@@ -22,4 +22,8 @@
     <string name="viewDetailedName">Contact name</string>
     <string name="viewDetailedId">Contact ID</string>
     <string name="MsgHeader">Subject:</string>
+    <string name="Register_Name">Enter name</string>
+    <string name="Register_ID">Enter Username</string>
+    <string name="Register_Password1">Create Password</string>
+    <string name="Register_Password2">Re-enter Password</string>
 </resources>
