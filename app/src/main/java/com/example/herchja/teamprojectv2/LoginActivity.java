@@ -1,24 +1,16 @@
 package com.example.herchja.teamprojectv2;
 
 import android.content.Intent;
-import android.preference.EditTextPreference;
-import android.provider.ContactsContract;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-import java.util.*;
+
 import com.kosalgeek.asynctask.AsyncResponse;
 import com.kosalgeek.asynctask.PostResponseAsyncTask;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
-import java.sql.*;
-import java.security.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.HashMap;
 
 
 public class LoginActivity extends AppCompatActivity implements AsyncResponse{
@@ -38,6 +30,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
     public void processFinish(String s) {
         if(s.equals("Login Failed") == false){
             Intent intent = new Intent(this, MainActivity.class);
+            /*
             String re = "\\D+(\\d+).*name\\W+([A-Za-z]+)";
             Pattern p = Pattern.compile(re);
             String id, name;
@@ -49,9 +42,12 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
                 intent.putExtra("User", name);
                 intent.putExtra("ID", id);
                 startActivity(intent);
-            }else {
+            }
+            else {
                 Toast.makeText(this, "Process Error", Toast.LENGTH_LONG).show();
             }
+            */
+            startActivity(intent);
         }
         else {
             Toast.makeText(this, "Failed Login Attempt", Toast.LENGTH_LONG).show();

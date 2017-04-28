@@ -7,12 +7,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
 
 import java.util.ArrayList;
-
-import com.example.herchja.teamprojectv2.R;
 
 public class MainActivity extends FragmentActivity {
 
@@ -25,19 +21,25 @@ public class MainActivity extends FragmentActivity {
     static public int userChooser;
     static public SharedPreferences mPrefs;
     static public SharedPreferencesHandler pref = new SharedPreferencesHandler();
+    private String id;
+    private String name;
+    private User user;
 
-
-
+/*
     Bundle bundle = getIntent().getExtras();
     private String value = bundle.getString("ID");
     private String value2 = bundle.getString("User");
-
+*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        /*
+        id = getIntent().getStringExtra("ID");
+        name = getIntent().getStringExtra("User");
+        user = new User(name, id);
+        */
         mPrefs = getPreferences(MODE_PRIVATE);
 
         if(listItems.isEmpty()) {

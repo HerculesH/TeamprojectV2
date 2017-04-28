@@ -1,12 +1,14 @@
 package com.example.herchja.teamprojectv2;
 
+import com.kosalgeek.asynctask.AsyncResponse;
+
 import java.util.ArrayList;
 
 /**
  * Created by akenf on 4/17/2017.
  */
 
-public class User {
+public class User implements AsyncResponse {
     private String username;
     private String id;
     ArrayList<String> messages;
@@ -46,10 +48,16 @@ public class User {
     }
 
     public ArrayList<String> getMessages() {
+
         return messages;
     }
 
     public void setMessages(ArrayList<String> messages) {
         this.messages = messages;
+    }
+
+    @Override
+    public void processFinish(String s) {
+
     }
 }
