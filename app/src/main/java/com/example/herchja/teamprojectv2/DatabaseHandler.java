@@ -1,15 +1,12 @@
 package com.example.herchja.teamprojectv2;
+import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.security.SecureRandom;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
-import java.io.*;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -178,9 +175,9 @@ public class DatabaseHandler {
                 int userTo = rs.getInt("messageTo");
                 if (userTo == id) { // messages that are being sent to the id
                     String text = rs.getString("message");
-                    String state = "0";
-                    Message newMessage = new Message(id, userFrom, userTo, 0, text, state);
-                    allMessages.add(newMessage);
+                    //int state = "0";
+                    //Message newMessage = new Message(id, userFrom, userTo, 0, text, state);
+                    //allMessages.add(newMessage);
                 } else {
                     continue;
                 }

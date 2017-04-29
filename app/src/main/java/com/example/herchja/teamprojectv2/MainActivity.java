@@ -7,6 +7,9 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.widget.Toast;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -16,30 +19,26 @@ public class MainActivity extends FragmentActivity {
     static public ArrayList<User> listItems = new ArrayList<User>();
     static public ArrayList<String> msgItems = new ArrayList<String>();
     static public ArrayList<String> groupMsg = new ArrayList<>();
-    static public DatabaseHandler db = new DatabaseHandler("","semaster","3ab7jz24s");
+    //static public DatabaseHandler db = new DatabaseHandler("","semaster","3ab7jz24s");
     static public User eUser;
     static public int userChooser;
     static public SharedPreferences mPrefs;
     static public SharedPreferencesHandler pref = new SharedPreferencesHandler();
-    private String id;
-    private String name;
-    private User user;
-
-/*
-    Bundle bundle = getIntent().getExtras();
-    private String value = bundle.getString("ID");
-    private String value2 = bundle.getString("User");
-*/
+    public User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        /*
-        id = getIntent().getStringExtra("ID");
-        name = getIntent().getStringExtra("User");
-        user = new User(name, id);
-        */
+        String s = getIntent().getStringExtra("user");
+        try {
+            user = new User(s);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Something went wrong!", Toast.LENGTH_LONG).show();
+            System.exit(-1);
+        }
+        System.out.println();
         mPrefs = getPreferences(MODE_PRIVATE);
 
         if(listItems.isEmpty()) {
@@ -61,7 +60,6 @@ public class MainActivity extends FragmentActivity {
         pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
         pager.setCurrentItem(1);
     }
-
 
     private class MyPagerAdapter extends FragmentPagerAdapter {
 

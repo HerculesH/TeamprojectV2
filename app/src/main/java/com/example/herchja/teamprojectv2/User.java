@@ -2,6 +2,10 @@ package com.example.herchja.teamprojectv2;
 
 import com.kosalgeek.asynctask.AsyncResponse;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 /**
@@ -9,14 +13,31 @@ import java.util.ArrayList;
  */
 
 public class User implements AsyncResponse {
+    private static final int unread = 0;
+    private static final int read = 1;
     private String username;
     private String id;
-    ArrayList<String> messages;
+    private JSONObject data;
+    ArrayList<Message> messages;
 
-    public User(String username, String id) {
+    public User(String name, String id){
         this.username = username;
         this.id = id;
-        //messages = getMessages(id);
+    }
+    public User(String s) throws JSONException {
+        messages = new ArrayList<Message>();
+        data = new JSONObject(s);
+        this.username = data.getJSONArray("user").getJSONObject(0).getString("name");
+        this.id = data.getJSONArray("user").getJSONObject(0).getString("id");
+
+        JSONArray raw = data.getJSONArray("user");
+        for(int i = 1; i < raw.length(); i++){
+            JSONObject mes = raw.getJSONObject(i);
+            Message temp = new Message(Integer.parseInt(this.id),  mes.getString("from"), mes.getString("text"),
+                    mes.getString("time"), mes.getString("salt"), unread);
+            messages.add(temp);
+            System.out.println();
+        }
     }
 
     public String toString()
@@ -47,13 +68,13 @@ public class User implements AsyncResponse {
         this.id = id;
     }
 
-    public ArrayList<String> getMessages() {
+    public ArrayList<Message> getMessages() {
 
         return messages;
     }
 
-    public void setMessages(ArrayList<String> messages) {
-        this.messages = messages;
+    public void delMessages(int ndx) {
+        messages.remove(ndx);
     }
 
     @Override

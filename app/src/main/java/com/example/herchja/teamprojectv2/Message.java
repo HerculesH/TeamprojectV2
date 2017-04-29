@@ -1,44 +1,51 @@
 package com.example.herchja.teamprojectv2;
 
-import java.util.ArrayList;
-
 /**
  * Created by akenf on 4/17/2017.
  */
 
 public class Message {
-    private int Id;
-    private int UserId;
-    private int SendId;
-    private ArrayList<String> GroupList = new ArrayList<>();
+    private int toid;
+    private String from;
+    private String timestamp;
     private String text;
-    private String state;
+    private int state;
+    private String salt;
 
-    public Message(int id, int userId, int sendId, int group, String text, String state) {
-        Id = id;
-        UserId = userId;
-        SendId = sendId;
+    public Message(int toid, String from, String text, String timestamp, String salt, int state) {
+        this.toid = toid;
+        this.from = from;
+        this.timestamp = timestamp;
         this.text = text;
+        this.salt = salt;
         this.state = state;
     }
 
-    public int getUserId() {
-        return UserId;
+    public String getSalt() {
+        return salt;
     }
 
-    public int getSendId() {
-        return SendId;
+    public int getToid() {
+        return toid;
     }
 
-    public String getMessage() {
+    public String getFrom() {
+        return from;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public String getText() {
         return text;
     }
 
-    public String getState() {
+    public int getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(int state) {
         this.state = state;
     }
 }

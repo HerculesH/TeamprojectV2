@@ -16,8 +16,6 @@ import java.util.HashMap;
 public class LoginActivity extends AppCompatActivity implements AsyncResponse{
 
     private EditText Username, Password;
-    DatabaseHandler db = DatabaseHandler.getInstance();
-    //ArrayList<Message> mes = db.getMessages(1141);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,25 +26,9 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
 
     @Override
     public void processFinish(String s) {
-        if(s.equals("Login Failed") == false){
+        if(s.contains("Login Failed") == false){
             Intent intent = new Intent(this, MainActivity.class);
-            /*
-            String re = "\\D+(\\d+).*name\\W+([A-Za-z]+)";
-            Pattern p = Pattern.compile(re);
-            String id, name;
-            Matcher m = p.matcher(s);
-
-            if(m.find()){
-                id = m.group(1);
-                name = m.group(2);
-                intent.putExtra("User", name);
-                intent.putExtra("ID", id);
-                startActivity(intent);
-            }
-            else {
-                Toast.makeText(this, "Process Error", Toast.LENGTH_LONG).show();
-            }
-            */
+            intent.putExtra("user", s);
             startActivity(intent);
         }
         else {
