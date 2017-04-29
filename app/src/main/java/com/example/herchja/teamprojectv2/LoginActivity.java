@@ -15,7 +15,7 @@ import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity implements AsyncResponse{
 
-    private EditText Username, Password;
+    private EditText Name, Username, Password, Password2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,30 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
         task.execute("http://54.148.185.237/login.php");
 
     }
+    public void register(View view){
+        Name = (EditText) findViewById(R.id.editText9);
+        Username = (EditText) findViewById(R.id.editText4);
+        Password = (EditText) findViewById(R.id.editText7);
+        Password2 = (EditText) findViewById(R.id.editText8);
+        if(Name.getText().toString().length() > 1){
+            if(Password.getText().toString().equals(Password2.getText().toString())){
+                if(DatabaseHandler.registerUser(Name.getText().toString(),
+                        Username.getText().toString(), Password.getText().toString(), "0")){
+                    swapToLogin(view);
+                }
+                else{
+                    Toast.makeText(this, "Username is taken.", Toast.LENGTH_LONG).show();
+                }
+            }
+            else{
+                Toast.makeText(this, "Passwords don't Match.", Toast.LENGTH_LONG).show();
+            }
+        }
+        else{
+            Toast.makeText(this, "Name not long enough.", Toast.LENGTH_LONG).show();
+        }
 
+    }
     public void swapToRegister(View view){
         setContentView(R.layout.fragment_register_user);
     }

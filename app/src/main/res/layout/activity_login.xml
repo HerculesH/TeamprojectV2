@@ -51,16 +51,16 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/edit_password"
-        android:inputType="textPersonName"
+        android:inputType="textPassword"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="@+id/editText"
         app:layout_constraintRight_toRightOf="@+id/editText"
         app:layout_constraintTop_toTopOf="parent"
+        tools:layout_constraintBottom_creator="1"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintBottom_creator="1" />
+        tools:layout_constraintTop_creator="1" />
 
     <TextView
         android:id="@+id/textView2"
