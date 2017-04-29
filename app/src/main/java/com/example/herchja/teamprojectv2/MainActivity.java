@@ -18,13 +18,12 @@ public class MainActivity extends FragmentActivity {
     static public ViewPager pager;
     static public ArrayList<User> listItems = new ArrayList<User>();
     static public ArrayList<String> msgItems = new ArrayList<String>();
-    static public ArrayList<String> groupMsg = new ArrayList<>();
-    //static public DatabaseHandler db = new DatabaseHandler("","semaster","3ab7jz24s");
+    //static public ArrayList<String> groupMsg = new ArrayList<>();
     static public User eUser;
     static public int userChooser;
     static public SharedPreferences mPrefs;
     static public SharedPreferencesHandler pref = new SharedPreferencesHandler();
-    public User user;
+    static public User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +53,7 @@ public class MainActivity extends FragmentActivity {
 
         if(msgItems.isEmpty()) {
             msgItems.add("new message");
+            //msgItems = user.getMessages();
         }
 
         pager = (ViewPager) findViewById(R.id.viewPager);
@@ -71,8 +71,6 @@ public class MainActivity extends FragmentActivity {
 
         @Override
         public Fragment getItem(int pos) {
-
-
             switch(pos) {
 
                 case 0: return FirstFragment.newInstance("View messages");

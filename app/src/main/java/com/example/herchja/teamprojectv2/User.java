@@ -68,6 +68,11 @@ public class User implements AsyncResponse {
         this.id = id;
     }
 
+    public void remMessage(int ndx) {
+
+        messages.remove(ndx);
+    }
+
     public ArrayList<Message> getMessages() {
 
         return messages;

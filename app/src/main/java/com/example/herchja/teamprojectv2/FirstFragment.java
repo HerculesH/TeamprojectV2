@@ -14,6 +14,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
+import static com.example.herchja.teamprojectv2.MainActivity.user;
+
 public class FirstFragment extends Fragment {
 
     public AlertDialog.Builder alertDialog;
@@ -23,19 +27,26 @@ public class FirstFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_first, container, false);
 
         final TextView numberOfContacts = (TextView) v.findViewById(R.id.textView4);
-        numberOfContacts.setText(MainActivity.msgItems.size() + " Messages");
+        numberOfContacts.setText(user.messages.size() + " Messages");
 
         TextView tv = (TextView) v.findViewById(R.id.tvFragFirst);
         tv.setText(getArguments().getString("msg"));
 
-        if(MainActivity.msgItems.isEmpty() != true)
+        if(user.messages.isEmpty() != true)
+        //if(MainActivity.msgItems.isEmpty() != true)
         {
-            Toast.makeText(getActivity(), "New message!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "New message(s)!", Toast.LENGTH_SHORT).show();
         }
 
         final ListView messageList = (ListView) v.findViewById(R.id.msgList);
+        final ArrayList<String> subjects = new ArrayList<String>();
+        for(Message m : user.getMessages()){
+            subjects.add(m.getFrom());
+        }
+        //final ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(
+        //      getActivity(),android.R.layout.simple_list_item_1,MainActivity.msgItems);
         final ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(
-                getActivity(),android.R.layout.simple_list_item_1,MainActivity.msgItems);
+                getActivity(),android.R.layout.simple_list_item_1,subjects);
         messageList.setAdapter(listViewAdapter);
 
         messageList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -50,7 +61,9 @@ public class FirstFragment extends Fragment {
                     final View view = factory.inflate(R.layout.fragment_msg_viewer, null);
 
                     final TextView cd = (TextView) view.findViewById(R.id.cdTimer);
+                    //text of message
                     final TextView txt = (TextView) view.findViewById(R.id.MsgText);
+                    txt.setText(user.getMessages().get(position).getText());
 
                     new CountDownTimer(10000, 1000) {
 
@@ -73,9 +86,10 @@ public class FirstFragment extends Fragment {
                     alertDialog.setPositiveButton("Done", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
 
-                            MainActivity.msgItems.remove(position);
+                            user.remMessage(position);
+                            subjects.remove(position);
                             listViewAdapter.notifyDataSetChanged();
-                            numberOfContacts.setText(MainActivity.msgItems.size() + " Messages");
+                            numberOfContacts.setText(user.getMessages().size() + " Messages");
 
                         }
                     });

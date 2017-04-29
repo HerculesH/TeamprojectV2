@@ -1,11 +1,9 @@
 package com.example.herchja.teamprojectv2;
 
-import android.content.SharedPreferences;
-import android.net.Uri;
-import android.content.Context;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,16 +12,9 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.widget.ToggleButton;
 
-import java.util.Collection;
-import java.util.Collections;
-
-import static android.content.Context.MODE_PRIVATE;
-import static android.widget.AdapterView.*;
+import static android.widget.AdapterView.OnItemClickListener;
 
 public class SecondFragment extends Fragment {
 
@@ -151,12 +142,8 @@ public class SecondFragment extends Fragment {
                     alertDialog.show();
 
                 }
-
-
-
             }
         });
-
         return v;
     }
 
