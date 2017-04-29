@@ -106,7 +106,7 @@ public class DatabaseHandler {
     }
 
     public static boolean registerUser(String name, String username, String pass, String valid) {
-        
+
         try {
             ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>();
             nvp.add(new BasicNameValuePair("name", name));
@@ -120,6 +120,18 @@ public class DatabaseHandler {
             HttpResponse response = httpclient.execute(httppost);
             HttpEntity entity = response.getEntity();
             is = entity.getContent();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is, "iso-8859-1"), 8);
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null)
+                sb.append(line + "\n");
+
+            is.close();
+            String result = sb.toString();
+            if (result.contains(" ")) {
+                return false;
+            }
+
 
         } catch (Exception e) {
             System.out.println("Error in getting messages: " + e.getMessage());
