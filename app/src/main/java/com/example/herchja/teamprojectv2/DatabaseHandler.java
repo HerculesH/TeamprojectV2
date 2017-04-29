@@ -105,17 +105,15 @@ public class DatabaseHandler {
 
     }
 
-    public static void registerUser(String name, String username, String pass, String valid) {
-
-        ArrayList<Message> msg = new ArrayList<Message>();
-        ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>();
-        nvp.add(new BasicNameValuePair("name", name));
-        nvp.add(new BasicNameValuePair("username", username));
-        nvp.add(new BasicNameValuePair("password", pass));
-        nvp.add(new BasicNameValuePair("valid", valid));
-        InputStream is = null;
-
+    public static boolean registerUser(String name, String username, String pass, String valid) {
+        
         try {
+            ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>();
+            nvp.add(new BasicNameValuePair("name", name));
+            nvp.add(new BasicNameValuePair("username", username));
+            nvp.add(new BasicNameValuePair("password", pass));
+            nvp.add(new BasicNameValuePair("valid", valid));
+            InputStream is = null;
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost("http://54.148.185.237/registerUser.php");
             httppost.setEntity(new UrlEncodedFormEntity(nvp));
@@ -125,8 +123,10 @@ public class DatabaseHandler {
 
         } catch (Exception e) {
             System.out.println("Error in getting messages: " + e.getMessage());
+            return false;
 
         }
+        return true;
 
     }
 
