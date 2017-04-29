@@ -28,57 +28,16 @@ public class DatabaseHandler {
     private static final Random RANDOM = new SecureRandom();
     private static final int ITERATIONS = 10000;
     private static final int KEY_LENGTH = 256;
-    private Connection connection;
 
-
-    /**
-     * Domain name for our project:
-     *      jdbc:mysql://" + "se-team4-project.cyl2fljhshrg.us-west-2.rds.amazonaws.com:3306/se4_mydb
-     *
-     * @param domain        domain name. Hardcoded this into the code.
-     * @param username      username. Only private users should know this
-     * @param password      password. Only private users should know this.
-     */
-    public DatabaseHandler(String domain, String username, String password) {
-        try {
-            this.connection = DriverManager.getConnection("jdbc:mysql://" + "se-team4-project.cyl2fljhshrg.us-west-2.rds.amazonaws.com:3306/se4_mydb",
-                    username, password);
-        } catch (Exception e) { System.out.println("Connection Failed!:\n" + e.getMessage()); }
-
-    }
 
 
     /**
-     * this will close the connection of the database handler.
+     * Constructor
      */
-    public void close() {
-        try {
-            this.connection.close();
-        } catch (Exception e) { System.out.println("Unable to close connection"); }
+    public DatabaseHandler() {
+
     }
 
-
-    /**
-     * This will get all of the usernames within the database and return an arraylist of all of them.
-     * @return  Arraylist of usernames in the database.
-     */
-    public ArrayList<String> getUsers() {
-        ArrayList<String> users = new ArrayList<>();
-        String query = "Select username from Users"; // select all users from username
-        try {
-            Statement stmt = this.connection.createStatement(); // connect to database
-            stmt.executeQuery(query);                           // execute query
-            ResultSet rs = stmt.getResultSet();                 // get results
-            while (rs.next()) {  // while there are things to read
-                users.add(rs.getString("username")); // add to arraylist
-            }
-            stmt.close();   // close connections
-            rs.close();
-        } catch (Exception e) {
-            System.out.println("Error executing statement!");
-        }
-        return users;
-    }
 
     /**
      * getNextSalt will create a random salt
@@ -113,26 +72,6 @@ public class DatabaseHandler {
         }
     }
 
-    /**
-     *  This will get the password stored in the database.
-     * @param userID    username to check
-     * @return          hashed password stored in database
-     */
-    public byte[] getPassword(String userID) {
-        byte[] pass = new byte[30];
-        String query = "SELECT password FROM Users WHERE userid=" + userID; // select all users from username
-        try {
-            Statement stmt = this.connection.createStatement(); // connect to database
-            stmt.executeQuery(query);                           // execute query
-            ResultSet rs = stmt.getResultSet();                 // get results
-            pass = rs.getBytes("password");
-            stmt.close();   // close connections
-            rs.close();
-        } catch (Exception e) {
-            System.out.println("Error executing statement!");
-        }
-        return pass;
-    }
 
 
     /**
@@ -166,38 +105,29 @@ public class DatabaseHandler {
 
     }
 
-    /**
-     *  This will register a user into the database.
-     * @param username      Username
-     * @param hashPass      Password (After it has been hashed)
-     * @param valid         Valid bit, always assume its 0 first.
-     * @return              True if there are no errors.
-     */
-    public boolean registerUser(String username, byte[] hashPass, int valid) {
-        String query = "INSERT INTO Users(username, password, valid) VALUES (" +
-                username + "," + hashPass + "," + valid + ")";
-        if (executeInsert(query)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    public static void registerUser(String name, String username, String pass, String valid) {
 
-    /**
-     * This function will execute any inserting queries for the database.
-     * @param query     The query to execute
-     * @return          True if it works, false if there's an error.
-     */
-    private boolean executeInsert(String query) {
+        ArrayList<Message> msg = new ArrayList<Message>();
+        ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>();
+        nvp.add(new BasicNameValuePair("name", name));
+        nvp.add(new BasicNameValuePair("username", username));
+        nvp.add(new BasicNameValuePair("password", pass));
+        nvp.add(new BasicNameValuePair("valid", valid));
+        InputStream is = null;
+
         try {
-            Statement stmt = this.connection.createStatement();
-            stmt.executeQuery(query);
-            stmt.close();
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httppost = new HttpPost("http://54.148.185.237/registerUser.php");
+            httppost.setEntity(new UrlEncodedFormEntity(nvp));
+            HttpResponse response = httpclient.execute(httppost);
+            HttpEntity entity = response.getEntity();
+            is = entity.getContent();
+
         } catch (Exception e) {
-            System.out.println("Error executing Statement: " + query + "\nError: " + e.getMessage());
-            return false;
+            System.out.println("Error in getting messages: " + e.getMessage());
+
         }
-        return true;
+
     }
 
     /**
@@ -222,7 +152,7 @@ public class DatabaseHandler {
     /**
      * Takes username and password from input and checks if the user exist and if the 
      * password matches and returnsa boolean.
-     */
+     *
     public boolean Login(String userID, char[] password){
     	 String query = "SELECT usernamr FROM Users WHERE userid=" + userID;
     	 byte[] salt = getNextSalt();
@@ -250,5 +180,5 @@ public class DatabaseHandler {
              return false;
          }
     	
-    }
+    }*/
 }
