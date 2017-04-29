@@ -51,4 +51,11 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
         task.execute("http://54.148.185.237/login.php");
 
     }
+
+    public void swapToRegister(View view){
+        setContentView(R.layout.fragment_register_user);
+    }
+    public void swapToLogin(View view){
+        setContentView(R.layout.activity_login);
+    }
 }
