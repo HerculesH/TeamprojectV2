@@ -62,16 +62,10 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
         u = Username.getText().toString();
         p = Password.getText().toString();
         p2 = Password2.getText().toString();
-        System.out.println(n + "\t u");
+
         if(n.length() > 1){
             if(p.equals(p2)){
-                if(DatabaseHandler.registerUser(n, u, p, "1")){
-                    Toast.makeText(this, "Successful creation.", Toast.LENGTH_LONG).show();
-                    swapToLogin(view);
-                }
-                else{
-                    Toast.makeText(this, "Username is taken.", Toast.LENGTH_LONG).show();
-                }
+                registerUser(n, u, p, "0");
             }
             else{
                 Toast.makeText(this, "Passwords don't Match.", Toast.LENGTH_LONG).show();
@@ -82,6 +76,20 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
         }
 
     }
+
+    public void registerUser(String name, String username, String pass, String valid) {
+
+
+        HashMap postData = new HashMap();
+        postData.put("name", name);
+        postData.put("username", username);
+        postData.put("password", pass);
+        postData.put("valid", valid);
+        PostResponseAsyncTask task = new PostResponseAsyncTask(this, postData);
+        task.execute("http://54.148.185.237/registerUser.php");
+
+    }
+
     public void swapToRegister(View view){
         setContentView(R.layout.fragment_register_user);
     }
