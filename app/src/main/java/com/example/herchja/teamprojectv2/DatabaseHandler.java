@@ -7,7 +7,16 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
-
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
+import java.io.*;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 /**
@@ -197,15 +206,28 @@ public class DatabaseHandler {
      * @param idFrom    The id of the current using (who it's from)
      * @param message   The message itself.
      */
-    public boolean sendMessage(int idTo, int idFrom, String message) {
+    public void sendMessage(int idTo, int idFrom, String message) {
 
-        String query = "INSERT INTO Messages(messageTo, messageFrom, message) VALUES (" +
-                idTo + "," + idFrom + "," + message + ")";
-        if (executeInsert(query)) {
-            return true;
-        } else {
-            return false;
+        ArrayList<Message> msg = new ArrayList<Message>();
+        ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>();
+        nvp.add(new BasicNameValuePair("toid", Integer.toString(idTo)));
+        nvp.add(new BasicNameValuePair("fromid", Integer.toString(idFrom)));
+        nvp.add(new BasicNameValuePair("text", message));
+        InputStream is = null;
+
+        try {
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httppost = new HttpPost("http://54.148.185.237/sendMessages.php");
+            httppost.setEntity(new UrlEncodedFormEntity(nvp));
+            HttpResponse response = httpclient.execute(httppost);
+            HttpEntity entity = response.getEntity();
+            is = entity.getContent();
+
+        } catch (Exception e) {
+            System.out.println("Error in getting messages: " + e.getMessage());
+
         }
+
     }
 
     /**
