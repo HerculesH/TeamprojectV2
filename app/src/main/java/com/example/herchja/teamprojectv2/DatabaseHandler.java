@@ -141,13 +141,14 @@ public class DatabaseHandler {
      * @param idFrom    The id of the current using (who it's from)
      * @param message   The message itself.
      */
-    public void sendMessage(int idTo, int idFrom, String message) {
+    public void sendMessage(int idTo, int idFrom, String message, String salt) {
 
         ArrayList<Message> msg = new ArrayList<Message>();
         ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>();
         nvp.add(new BasicNameValuePair("toid", Integer.toString(idTo)));
         nvp.add(new BasicNameValuePair("fromid", Integer.toString(idFrom)));
         nvp.add(new BasicNameValuePair("text", message));
+        nvp.add(new BasicNameValuePair("salt", salt));
         InputStream is = null;
 
         try {
