@@ -56,10 +56,17 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
         Username = (EditText) findViewById(R.id.editText4);
         Password = (EditText) findViewById(R.id.editText7);
         Password2 = (EditText) findViewById(R.id.editText8);
-        if(Name.getText().toString().length() > 1){
-            if(Password.getText().toString().equals(Password2.getText().toString())){
-                if(DatabaseHandler.registerUser(Name.getText().toString(),
-                        Username.getText().toString(), Password.getText().toString(), "0")){
+        System.out.println();
+        String n, u, p, p2;
+        n = Name.getText().toString();
+        u = Username.getText().toString();
+        p = Password.getText().toString();
+        p2 = Password2.getText().toString();
+        System.out.println(n + "\t u");
+        if(n.length() > 1){
+            if(p.equals(p2)){
+                if(DatabaseHandler.registerUser(n, u, p, "1")){
+                    Toast.makeText(this, "Successful creation.", Toast.LENGTH_LONG).show();
                     swapToLogin(view);
                 }
                 else{
