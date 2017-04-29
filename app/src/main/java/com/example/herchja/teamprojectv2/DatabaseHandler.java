@@ -1,12 +1,4 @@
 package com.example.herchja.teamprojectv2;
-import java.security.SecureRandom;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -15,8 +7,15 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONObject;
-import java.io.*;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
+
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 /**
@@ -80,12 +79,12 @@ public class DatabaseHandler {
      * @param idFrom    The id of the current using (who it's from)
      * @param message   The message itself.
      */
-    public void sendMessage(int idTo, int idFrom, String message, String salt) {
+    public static void sendMessage(String idTo, String idFrom, String message, String salt) {
 
         ArrayList<Message> msg = new ArrayList<Message>();
         ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>();
-        nvp.add(new BasicNameValuePair("toid", Integer.toString(idTo)));
-        nvp.add(new BasicNameValuePair("fromid", Integer.toString(idFrom)));
+        nvp.add(new BasicNameValuePair("toid", idTo));
+        nvp.add(new BasicNameValuePair("fromid", idFrom));
         nvp.add(new BasicNameValuePair("text", message));
         nvp.add(new BasicNameValuePair("salt", salt));
         InputStream is = null;

@@ -26,10 +26,19 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
 
     @Override
     public void processFinish(String s) {
-        if(s.contains("Login Failed") == false){
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("user", s);
-            startActivity(intent);
+        if(s.equals("registered")){
+            //do something after register
+            Toast.makeText(this, "Register successful", Toast.LENGTH_LONG).show();
+        }
+        else if(s.contains("Login Failed") == false){
+            if(s.contains("User is blocked") == false) {
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra("user", s);
+                startActivity(intent);
+            }
+            else{
+                Toast.makeText(this, "User is blocked!", Toast.LENGTH_LONG).show();
+            }
         }
         else {
             Toast.makeText(this, "Failed Login Attempt", Toast.LENGTH_LONG).show();

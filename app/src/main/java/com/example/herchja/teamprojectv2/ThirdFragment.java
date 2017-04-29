@@ -1,22 +1,16 @@
 package com.example.herchja.teamprojectv2;
 
-import android.app.Activity;
-import android.content.Context;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import org.w3c.dom.Text;
+import static com.example.herchja.teamprojectv2.MainActivity.user;
 
 
 public class ThirdFragment extends Fragment {
@@ -43,7 +37,9 @@ public class ThirdFragment extends Fragment {
             public void onClick(View view) {
 
                 //send message implementation
-                msg.setText("");
+                DatabaseHandler.sendMessage("jane", user.getUsername(), "text", null);
+                msg = (EditText) v.findViewById(R.id.MsgBox);
+                String messa = msg.getText().toString();
                 subject.setText("");
 
             }

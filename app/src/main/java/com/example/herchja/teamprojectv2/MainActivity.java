@@ -19,6 +19,7 @@ public class MainActivity extends FragmentActivity {
     static public ArrayList<User> listItems = new ArrayList<User>();
     static public ArrayList<String> msgItems = new ArrayList<String>();
     //static public ArrayList<String> groupMsg = new ArrayList<>();
+    static public DatabaseHandler db;
     static public User eUser;
     static public int userChooser;
     static public SharedPreferences mPrefs;
@@ -37,7 +38,7 @@ public class MainActivity extends FragmentActivity {
             Toast.makeText(this, "Something went wrong!", Toast.LENGTH_LONG).show();
             System.exit(-1);
         }
-        System.out.println();
+        //db = new DatabaseHandler("", "", "");
         mPrefs = getPreferences(MODE_PRIVATE);
 
         if(listItems.isEmpty()) {
