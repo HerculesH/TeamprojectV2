@@ -20,7 +20,7 @@ public class User implements AsyncResponse {
     private JSONObject data;
     ArrayList<Message> messages;
 
-    public User(String name, String id){
+    public User(String username, String id){
         this.username = username;
         this.id = id;
     }

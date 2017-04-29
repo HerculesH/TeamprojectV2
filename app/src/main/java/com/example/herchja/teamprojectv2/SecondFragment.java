@@ -59,7 +59,7 @@ public class SecondFragment extends Fragment {
                             MainActivity.eUser = new User(nameUser,idUser);
                             listViewAdapter.add(MainActivity.eUser);
                             listViewAdapter.notifyDataSetChanged();
-                            MainActivity.pref.saveArray(MainActivity.listItems,MainActivity.mPrefs);
+                            System.out.println(MainActivity.listItems + " stored list SYSTEMCHECKQ");
                             numContacts = MainActivity.listItems.size() - 1;
                             numberOfContacts.setText(numContacts + " Contacts");
 
@@ -103,7 +103,6 @@ public class SecondFragment extends Fragment {
                             {
                                 grab.setUsername(setName.getText().toString());
                                 grab.setId(setId.getText().toString());
-                                MainActivity.pref.saveArray(MainActivity.listItems,MainActivity.mPrefs);
                                 setName.setFocusable(false);
                                 setId.setFocusable(false);
                             }
@@ -123,7 +122,6 @@ public class SecondFragment extends Fragment {
                     alertDialog.setNeutralButton("Delete Contact", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             MainActivity.listItems.remove(position);
-                            MainActivity.pref.saveArray(MainActivity.listItems,MainActivity.mPrefs);
                             numContacts = MainActivity.listItems.size() - 1;
                             numberOfContacts.setText(numContacts + " Contacts");
                             listViewAdapter.notifyDataSetChanged();

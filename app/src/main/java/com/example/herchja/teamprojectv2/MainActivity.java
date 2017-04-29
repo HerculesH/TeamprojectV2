@@ -49,7 +49,7 @@ public class MainActivity extends FragmentActivity {
         }
         else
         {
-            listItems = pref.getArray(mPrefs);
+            listItems = pref.getArray(this.getApplicationContext());
         }
 
         if(msgItems.isEmpty()) {
