@@ -66,6 +66,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
         if(n.length() > 1){
             if(p.equals(p2)){
                 registerUser(n, u, p, "0");
+                swapToLogin(view);
             }
             else{
                 Toast.makeText(this, "Passwords don't Match.", Toast.LENGTH_LONG).show();
