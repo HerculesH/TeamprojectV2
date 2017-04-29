@@ -29,7 +29,7 @@ public class DatabaseHandler {
     private static final int ITERATIONS = 10000;
     private static final int KEY_LENGTH = 256;
     private Connection connection;
-    static DatabaseHandler instance;
+
 
     /**
      * Domain name for our project:
@@ -47,12 +47,6 @@ public class DatabaseHandler {
 
     }
 
-    public static DatabaseHandler getInstance(){
-        if(instance == null){
-            instance = new DatabaseHandler("", "semaster", "3ab7jz24s");
-        }
-        return instance;
-    }
 
     /**
      * this will close the connection of the database handler.
@@ -63,33 +57,6 @@ public class DatabaseHandler {
         } catch (Exception e) { System.out.println("Unable to close connection"); }
     }
 
-
-
-    /**
-     * connectJDBCToAWSec2 will check to see if the connection to the database is working
-     * correctly, and print out a statement saying successful connection or error.
-     */
-    public void connectJDBCToAWSEC2() {
-
-        System.out.println("----MySQL JDBC Connection Testing-------");
-
-        /* Locate class for mysql jdbc driver */
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            System.out.println("Where is your MySQL JDBC Driver?");
-            e.printStackTrace();
-            return;
-        }
-
-        System.out.println("MySQL JDBC Driver Registered!");
-        /* Print out a message depending if the connection worked. */
-        if (this.connection != null) {
-            System.out.println("Able to connect to database!");
-        } else {
-            System.out.println("FAILURE! Failed to make connection!");
-        }
-    }
 
     /**
      * This will get all of the usernames within the database and return an arraylist of all of them.
@@ -167,38 +134,6 @@ public class DatabaseHandler {
         return pass;
     }
 
-    /**
-     * getMessages will return all messages that the userid has to read.
-     * @param id    user to get messages to be read.
-     * @return      an arraylist of messages the user has to read.
-     */
-    public ArrayList<Message> getMessages(int id) {
-        ArrayList<Message> allMessages = new ArrayList<>();
-        String query = "SELECT * FROM Messages";
-        try {
-            Statement stmt = this.connection.createStatement();
-            stmt.executeQuery(query);
-            ResultSet rs = stmt.getResultSet();
-            while (rs.next()) {
-                int userFrom = rs.getInt("messageFrom");
-                int userTo = rs.getInt("messageTo");
-                if (userTo == id) { // messages that are being sent to the id
-                    String text = rs.getString("message");
-                    //int state = "0";
-                    //Message newMessage = new Message(id, userFrom, userTo, 0, text, state);
-                    //allMessages.add(newMessage);
-                } else {
-                    continue;
-                }
-            }
-            stmt.close();
-            rs.close();
-        } catch (Exception e) {
-            System.out.println("Error executing Statement!" + e.getMessage());
-        }
-        return allMessages;
-
-    }
 
     /**
      * This will send a message to the database for the users to read.
