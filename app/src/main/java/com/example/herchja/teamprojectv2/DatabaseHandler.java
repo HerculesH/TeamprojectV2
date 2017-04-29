@@ -20,6 +20,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 /**
  * Created by Danny Nguyen on 4/5/2017.
+ * just ignore this file for now lol.
  */
 
 public class DatabaseHandler {
