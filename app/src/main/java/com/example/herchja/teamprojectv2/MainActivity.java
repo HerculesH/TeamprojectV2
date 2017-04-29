@@ -2,6 +2,7 @@ package com.example.herchja.teamprojectv2;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -18,13 +19,13 @@ public class MainActivity extends FragmentActivity {
     static public ViewPager pager;
     static public ArrayList<User> listItems = new ArrayList<User>();
     static public ArrayList<String> msgItems = new ArrayList<String>();
-    //static public ArrayList<String> groupMsg = new ArrayList<>();
     static public DatabaseHandler db;
     static public User eUser;
     static public int userChooser;
-    static public SharedPreferences mPrefs;
     static public SharedPreferencesHandler pref = new SharedPreferencesHandler();
     static public User user;
+    static public String save;
+    static public  SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +40,15 @@ public class MainActivity extends FragmentActivity {
             System.exit(-1);
         }
         //db = new DatabaseHandler("", "", "");
-        mPrefs = getPreferences(MODE_PRIVATE);
 
-        if(listItems.isEmpty()) {
+        SharedPreferences preferences = getApplicationContext().getSharedPreferences(user.getId(), MODE_PRIVATE);
+        editor = preferences.edit();
+
+        MainActivity.pref.saveArray(MainActivity.listItems,editor,user.getId());
+
+
+        if(save.length() <= 2) {
+
 
             eUser = new User("+ Add contact","");
             listItems.add(eUser);
@@ -49,7 +56,8 @@ public class MainActivity extends FragmentActivity {
         }
         else
         {
-            listItems = pref.getArray(this.getApplicationContext());
+            listItems.clear();
+            listItems = pref.getArray(this.getApplicationContext(),user.getId());
         }
 
         if(msgItems.isEmpty()) {

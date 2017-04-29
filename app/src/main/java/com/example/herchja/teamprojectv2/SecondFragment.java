@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import static android.widget.AdapterView.OnItemClickListener;
+import static com.example.herchja.teamprojectv2.MainActivity.user;
 
 public class SecondFragment extends Fragment {
 
@@ -59,7 +60,9 @@ public class SecondFragment extends Fragment {
                             MainActivity.eUser = new User(nameUser,idUser);
                             listViewAdapter.add(MainActivity.eUser);
                             listViewAdapter.notifyDataSetChanged();
-                            System.out.println(MainActivity.listItems + " stored list SYSTEMCHECKQ");
+
+                            MainActivity.pref.saveArray(MainActivity.listItems,MainActivity.editor,user.getId());
+
                             numContacts = MainActivity.listItems.size() - 1;
                             numberOfContacts.setText(numContacts + " Contacts");
 

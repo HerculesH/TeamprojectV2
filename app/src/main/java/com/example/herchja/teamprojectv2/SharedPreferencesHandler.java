@@ -10,6 +10,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -24,28 +25,25 @@ import static android.content.ContentValues.TAG;
 
         String Json;
 
-        public void saveArray(ArrayList<User> u, Context c)
+        public void saveArray(ArrayList<User> u, SharedPreferences.Editor edit,String savekey)
         {
-            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(c);
-            SharedPreferences.Editor editor = sharedPrefs.edit();
             Gson gson = new Gson();
 
             Json = gson.toJson(u);
-            System.out.println(u + " input list SYSTEMCHECKQ");
-            editor.putString("save1", Json);
-            editor.apply();
+            MainActivity.save = Json;
+            edit.remove(savekey);
+            edit.putString(savekey, Json);
+            edit.commit();
         }
 
-        public ArrayList<User> getArray(Context c)
+        public ArrayList<User> getArray(Context c, String getkey)
         {
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(c);
             Gson gson = new Gson();
-            String json = sharedPrefs.getString("save1", Json);
+            String json = sharedPrefs.getString(getkey, Json);
             Type type = new TypeToken<ArrayList<User>>() {}.getType();
             ArrayList<User> arrayList = gson.fromJson(json, type);
-            System.out.println(arrayList + " Output list SYSTEMCHECKQ");
 
-            MainActivity.listItems = arrayList;
             return arrayList;
         }
 
