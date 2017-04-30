@@ -46,7 +46,6 @@ public class MainActivity extends FragmentActivity {
 
         MainActivity.pref.saveArray(MainActivity.listItems,editor,user.getId());
 
-
         if(save.length() <= 2) {
 
 
@@ -56,7 +55,6 @@ public class MainActivity extends FragmentActivity {
         }
         else
         {
-            listItems.clear();
             listItems = pref.getArray(this.getApplicationContext(),user.getId());
         }
 

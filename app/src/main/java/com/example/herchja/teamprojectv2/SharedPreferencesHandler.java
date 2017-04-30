@@ -31,7 +31,7 @@ import static android.content.ContentValues.TAG;
 
             Json = gson.toJson(u);
             MainActivity.save = Json;
-            edit.remove(savekey);
+            edit.clear();
             edit.putString(savekey, Json);
             edit.commit();
         }
@@ -40,7 +40,7 @@ import static android.content.ContentValues.TAG;
         {
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(c);
             Gson gson = new Gson();
-            String json = sharedPrefs.getString(getkey, Json);
+            String json = sharedPrefs.getString(getkey, "");
             Type type = new TypeToken<ArrayList<User>>() {}.getType();
             ArrayList<User> arrayList = gson.fromJson(json, type);
 
