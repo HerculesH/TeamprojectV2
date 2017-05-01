@@ -11,7 +11,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="Contact_admin">Request Account</string>
     <string name="Sendmgs">Send</string>
-    <string name="SendmsgID">Add recipent id</string>
+    <string name="SendmsgID">Add recipent name</string>
     <string name="encryptmsg">Set a message timer</string>
     <string name="MsgBox">Input your message</string>
     <string name="Add_contact">Add</string>

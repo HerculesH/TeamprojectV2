@@ -33,7 +33,6 @@ public class FirstFragment extends Fragment {
         tv.setText(getArguments().getString("msg"));
 
         if(user.messages.isEmpty() != true)
-        //if(MainActivity.msgItems.isEmpty() != true)
         {
             Toast.makeText(getActivity(), "New message(s)!", Toast.LENGTH_SHORT).show();
         }
@@ -43,8 +42,6 @@ public class FirstFragment extends Fragment {
         for(Message m : user.getMessages()){
             subjects.add(m.getFrom());
         }
-        //final ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(
-        //      getActivity(),android.R.layout.simple_list_item_1,MainActivity.msgItems);
         final ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(
                 getActivity(),android.R.layout.simple_list_item_1,subjects);
         messageList.setAdapter(listViewAdapter);

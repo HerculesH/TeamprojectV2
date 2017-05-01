@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by akenf on 4/17/2017.
@@ -19,6 +20,7 @@ public class User implements AsyncResponse {
     private String id;
     private JSONObject data;
     ArrayList<Message> messages;
+    ArrayList<String> contactList;
 
     public User(String username, String id){
         this.username = username;
@@ -31,7 +33,11 @@ public class User implements AsyncResponse {
         this.id = data.getJSONArray("user").getJSONObject(0).getString("id");
 
         JSONArray raw = data.getJSONArray("user");
-        for(int i = 1; i < raw.length(); i++){
+        JSONObject contacts = raw.getJSONObject(1);
+        String cont = contacts.getString("contacts");
+        //String cont = " hello hi";
+        contactList = new ArrayList<String>(Arrays.asList(cont.split(" ")));
+        for(int i = 2; i < raw.length(); i++){
             JSONObject mes = raw.getJSONObject(i);
             Message temp = new Message(Integer.parseInt(this.id),  mes.getString("from"), mes.getString("text"),
                     mes.getString("time"), mes.getString("salt"), unread);

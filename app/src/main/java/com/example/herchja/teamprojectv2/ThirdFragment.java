@@ -9,9 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
-
-import com.kosalgeek.asynctask.PostResponseAsyncTask;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -26,7 +25,6 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static com.example.herchja.teamprojectv2.MainActivity.user;
 
@@ -64,8 +62,9 @@ public class ThirdFragment extends Fragment {
                 key = null;
                 new myAsyncTask().execute();
 
-                msg = (EditText) v.findViewById(R.id.MsgBox);
-                String message = msg.getText().toString();
+                Toast.makeText(getActivity(), "Message has been sent!", Toast.LENGTH_SHORT).show();
+                sendto.setText("");
+                msg.setText("");
                 subject.setText("");
 
             }
