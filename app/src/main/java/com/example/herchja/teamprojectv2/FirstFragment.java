@@ -143,8 +143,12 @@ public class FirstFragment extends Fragment {
                     //text of message
                     final TextView txt = (TextView) view.findViewById(R.id.MsgText);
                     txt.setText(user.getMessages().get(position).getText());
-
-                    new CountDownTimer(10000, 1000) {
+                    int countdown = 10000;
+                    int t = user.getMessages().get(position).getTimer();
+                    if(user.getMessages().get(position).getTimer() != 0){
+                        countdown = 1000 * (user.getMessages().get(position).getTimer());
+                    }
+                    new CountDownTimer(countdown,1000) {
 
                         public void onTick(long millisUntilFinished) {
                             cd.setText("seconds remaining: " + millisUntilFinished / 1000);
@@ -186,8 +190,6 @@ public class FirstFragment extends Fragment {
                     });
                     MainActivity.alertDialog.show();
                 }
-
-
             }
         });
 
