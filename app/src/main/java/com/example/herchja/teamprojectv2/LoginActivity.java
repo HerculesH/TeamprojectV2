@@ -11,6 +11,8 @@ import java.io.RandomAccessFile;
 import com.kosalgeek.asynctask.AsyncResponse;
 import com.kosalgeek.asynctask.PostResponseAsyncTask;
 
+import org.apache.commons.codec.binary.Base64;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.regex.Matcher;
@@ -62,11 +64,14 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
         Username = (EditText) findViewById(R.id.editText);
         Password = (EditText) findViewById(R.id.editText2);
         View Error = findViewById(R.id.LoginError);
+        byte[] salt = getSalt();
+        byte[] hash = hash(Password.getText().toString().toCharArray(), salt);
+        byte[] encode = Base64.encodeBase64(hash);
 
         HashMap postData = new HashMap();
         postData.put("mobile", "android");
         postData.put("txtUsername", Username.getText().toString());
-        postData.put("txtPassword", Password.getText().toString());
+        postData.put("txtPassword", new String(encode));
 
         PostResponseAsyncTask task = new PostResponseAsyncTask(this, postData);
         task.execute("http://54.148.185.237/login.php");
@@ -105,21 +110,22 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
         HashMap postData = new HashMap();
         byte[] salt = getSalt();
         byte[] passHash = hash(pass.toCharArray(), salt);
+        byte[] encoded = Base64.encodeBase64(passHash);
+
         // String storeHash = "0x" + BitConverter.ToString(passHash).Replace("-", "");
 
         postData.put("name", name);
         postData.put("username", username);
-        try { // NOTE - NEED TO FIGURE OUT WHAT ENCODING TO USE FOR PASSWORD STORING
-        postData.put("password", new String(passHash, "UTF-8")); } catch (Exception e) {}
+        postData.put("password", new String(encoded));
         postData.put("valid", valid);
         PostResponseAsyncTask task = new PostResponseAsyncTask(this, postData);
         task.execute("http://54.148.185.237/registerUser.php");
 
     }
     public byte[] getSalt() {
-
         return salt;
     }
+
     public byte[] hash(char[] password, byte[] salt) {
         int ITERATIONS = 1000;
         int KEY_LENGTH = 256;
