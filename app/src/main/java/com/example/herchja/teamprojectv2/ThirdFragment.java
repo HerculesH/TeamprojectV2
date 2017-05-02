@@ -29,6 +29,12 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import javax.crypto.Cipher;
 
 import static com.example.herchja.teamprojectv2.MainActivity.user;
 
@@ -95,6 +101,7 @@ public class ThirdFragment extends Fragment {
                 idTo = sendto.getText().toString();
                 idFrom = user.getUsername();
                 message = msg.getText().toString();
+
                 key = null;
                 new myAsyncTask().execute();
 
@@ -132,10 +139,18 @@ public class ThirdFragment extends Fragment {
 
 
     class myAsyncTask extends AsyncTask<Void, Void, Void> {
-        protected Void doInBackground(Void... params) {
+        protected Void doInBackground(Void... params){
 
             ArrayList<Message> msg = new ArrayList<Message>();
             ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>();
+            try {
+                KeyPair keyPair = buildKeyPair();
+                PublicKey pubKey = keyPair.getPublic();
+                PrivateKey privateKey = keyPair.getPrivate();
+
+            } catch (Exception e) {
+
+            }
             nvp.add(new BasicNameValuePair("toid", idTo));
             nvp.add(new BasicNameValuePair("fromid", idFrom));
             nvp.add(new BasicNameValuePair("text", message));
@@ -165,6 +180,46 @@ public class ThirdFragment extends Fragment {
             }
             return null;
         }
+
+        /**
+         *  Generate a key pair
+         * @return newly generated key pair
+         * @throws NoSuchAlgorithmException
+         */
+        public KeyPair buildKeyPair() throws NoSuchAlgorithmException {
+            final int keySize = 2048;
+            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+            keyPairGenerator.initialize(keySize);
+            return keyPairGenerator.genKeyPair();
+        }
+
+        /**
+         * Encrypt the messaage
+         * @param privateKey
+         * @param message
+         * @return
+         * @throws Exception
+         */
+        public byte[] encrypt(PrivateKey privateKey, String message) throws Exception {
+            Cipher cipher = Cipher.getInstance("RSA");
+            cipher.init(Cipher.ENCRYPT_MODE, privateKey);
+            return cipher.doFinal(message.getBytes());
+        }
+
+        /**
+         *  Decrypt the message given a public key.
+         * @param publicKey
+         * @param encrypted
+         * @return
+         * @throws Exception
+         */
+        public byte[] decrypt(PublicKey publicKey, byte [] encrypted) throws Exception {
+            Cipher cipher = Cipher.getInstance("RSA");
+            cipher.init(Cipher.DECRYPT_MODE, publicKey);
+
+            return cipher.doFinal(encrypted);
+        }
+
     }
 
 
