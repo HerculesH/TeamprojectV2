@@ -33,7 +33,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import static android.widget.AdapterView.OnItemClickListener;
-import static com.example.herchja.teamprojectv2.MainActivity.sendmsg;
 import static com.example.herchja.teamprojectv2.MainActivity.user;
 
 public class SecondFragment extends Fragment {

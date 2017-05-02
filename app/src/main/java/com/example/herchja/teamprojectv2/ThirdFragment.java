@@ -46,8 +46,9 @@ public class ThirdFragment extends Fragment {
     private ToggleButton ToggleTimer;
     private EditText Timerbox;
     private EditText msg;
+    private EditText timer;
     public static EditText sendto;
-    public String idTo, idFrom, message, key;
+    public String idTo, idFrom, message, key, timerm;
     public static View v;
 
     @Override
@@ -90,6 +91,7 @@ public class ThirdFragment extends Fragment {
         });
 
         sendto = (EditText) v.findViewById(R.id.editText6);
+        timer = (EditText) v.findViewById(R.id.editText5);
         msg = (EditText) v.findViewById(R.id.MsgBox);
         Timerbox = (EditText) v.findViewById(R.id.editText5);
 
@@ -100,6 +102,7 @@ public class ThirdFragment extends Fragment {
             public void onClick(View view) {
 
                 //send message implementation
+                timerm = timer.getText().toString();
                 idTo = sendto.getText().toString();
                 idFrom = user.getUsername();
                 message = msg.getText().toString();
@@ -160,6 +163,7 @@ public class ThirdFragment extends Fragment {
             nvp.add(new BasicNameValuePair("fromid", idFrom));
             nvp.add(new BasicNameValuePair("text", new String(encoded)));
             nvp.add(new BasicNameValuePair("salt", key));
+            nvp.add(new BasicNameValuePair("timer", timerm));
             InputStream is = null;
 
             try {

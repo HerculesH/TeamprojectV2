@@ -18,7 +18,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -36,7 +35,6 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.example.herchja.teamprojectv2.MainActivity.sendmsg;
 import static com.example.herchja.teamprojectv2.MainActivity.user;
 
 public class FirstFragment extends Fragment {
@@ -60,12 +58,14 @@ public class FirstFragment extends Fragment {
                     }
                 });
             }
-        }, 0, 15000); // updates ever 15 seconds
+        }, 0, 15000); // updates each 40 secs
     }
 
     private void updateLists(){
-
-        // code that should be updated
+        for(Message m : user.getMessages()){
+            subjects.add(String.format("From  -  %-" + (40 - m.getFrom().length()) +"s %20s", m.getFrom(), m.getTimestamp().substring(0,16)));
+        }
+        listViewAdapter.notifyDataSetChanged();
         System.out.println("SYSTEMCHECKQ");
     }
 
@@ -78,23 +78,6 @@ public class FirstFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View first = inflater.inflate(R.layout.fragment_first, container, false);
-
-        Button refresh = (Button) first.findViewById(R.id.refresh);
-        refresh.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public  void onClick(View v)
-            {
-                for(Message m : user.getMessages()){
-
-                    subjects.add(String.format("From  -  %-" + (40 - m.getFrom().length()) +"s %20s", m.getFrom(), m.getTimestamp().substring(0,16)));
-
-                }
-                //Refresh button to refresh msglist
-            }
-
-        });
-
 
         Button logout = (Button) first.findViewById(R.id.logout1);
         logout.setOnClickListener(new View.OnClickListener() {
@@ -140,11 +123,6 @@ public class FirstFragment extends Fragment {
 
         final ListView messageList = (ListView) first.findViewById(R.id.msgList);
         subjects = new ArrayList<String>();
-        for(Message m : user.getMessages()){
-
-                subjects.add(String.format("From  -  %-" + (40 - m.getFrom().length()) +"s %20s", m.getFrom(), m.getTimestamp().substring(0,16)));
-
-        }
         listViewAdapter = new ArrayAdapter<String>(
                 getActivity(),android.R.layout.simple_list_item_1,subjects);
         messageList.setAdapter(listViewAdapter);
@@ -165,8 +143,12 @@ public class FirstFragment extends Fragment {
                     //text of message
                     final TextView txt = (TextView) view.findViewById(R.id.MsgText);
                     txt.setText(user.getMessages().get(position).getText());
-
-                    new CountDownTimer(10000, 1000) {
+                    int countdown = 10000;
+                    int t = user.getMessages().get(position).getTimer();
+                    if(user.getMessages().get(position).getTimer() != 0){
+                        countdown = 1000 * (user.getMessages().get(position).getTimer());
+                    }
+                    new CountDownTimer(countdown,1000) {
 
                         public void onTick(long millisUntilFinished) {
                             cd.setText("seconds remaining: " + millisUntilFinished / 1000);
@@ -197,28 +179,27 @@ public class FirstFragment extends Fragment {
                     });
 
                     MainActivity.alertDialog.setNegativeButton("Reply", new DialogInterface.OnClickListener() {
-                        public void onClick(final DialogInterface dialog, int which) {
+                        public void onClick(DialogInterface dialog, int which) {
 
-                            SecondFragment.sendmsg(user.getMessages().get(position).getFrom());
-                            ThirdFragment.setMsg(user.getMessages().get(position).getFrom());
-
-                            idMes = user.getMessages().get(position).getId();
-                            user.remMessage(position);
-                            subjects.remove(position);
-                            new delTask().execute();
-                            listViewAdapter.notifyDataSetChanged();
-                            numberOfContacts.setText(user.getMessages().size() + " Messages");
+                            //MainActivity.sendmsg = (EditText) MainActivity.v.findViewById(R.id.editText6);
+                            final EditText sendmsg = (EditText) ThirdFragment.v.findViewById(R.id.editText6);
+                            sendmsg.setText("test");
+                            MainActivity.pager.setCurrentItem(2,true);
 
                         }
                     });
                     MainActivity.alertDialog.show();
                 }
-
-
             }
         });
 
         return first;
+    }
+
+    public void refreshFrag()
+    {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this).attach(this).commit();
     }
 
     public static FirstFragment newInstance(String text) {

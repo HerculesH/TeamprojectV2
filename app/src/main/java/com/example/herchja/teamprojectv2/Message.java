@@ -10,12 +10,12 @@ public class Message {
     private String from;
     private String timestamp;
     private String text;
-    private int state;
+    private int timer;
     private String salt;
 
 
 
-    public Message(int id, int toid, String from, String text, String timestamp, String salt, int state) {
+    public Message(int id, int toid, String from, String text, String timestamp, String salt, String timer) {
         this.id = id;
         this.toid = toid;
         this.from = from;
@@ -23,7 +23,7 @@ public class Message {
 
         this.text = text;
         this.salt = salt;
-        this.state = state;
+        this.timer = Integer.parseInt(timer);
     }
 
     public int getId() {
@@ -50,11 +50,7 @@ public class Message {
         return text;
     }
 
-    public int getState() {
-        return state;
-    }
-
-    public void setState(int state) {
-        this.state = state;
+    public int getTimer() {
+        return timer;
     }
 }

@@ -12,8 +12,6 @@ import java.util.Arrays;
  */
 
 public class User  {
-    private static final int unread = 0;
-    private static final int read = 1;
     private String username;
     private String id;
     private JSONObject data;
@@ -41,10 +39,11 @@ public class User  {
         for(int i = 2; i < raw.length(); i++){
             JSONObject mes = raw.getJSONObject(i);
             Message temp = new Message(Integer.parseInt(mes.getString("id")), Integer.parseInt(this.id),  mes.getString("from"), mes.getString("text"),
-                    mes.getString("time"), mes.getString("salt"), unread);
+                    mes.getString("time"), mes.getString("salt"), mes.getString("timer"));
             messages.add(temp);
             System.out.println();
         }
+        System.out.println();
     }
 
     public String toString()
