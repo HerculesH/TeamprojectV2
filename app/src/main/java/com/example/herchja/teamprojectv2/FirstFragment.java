@@ -60,23 +60,12 @@ public class FirstFragment extends Fragment {
                     }
                 });
             }
-        }, 0, 5000);
+        }, 0, 15000); // updates ever 15 seconds
     }
 
     private void updateLists(){
 
-        for(Message m : user.getMessages()){
-            if(subjects.contains(m))
-            {
-
-            }
-            else
-            {
-                subjects.add(String.format("From  -  %-" + (40 - m.getFrom().length()) +"s %20s", m.getFrom(), m.getTimestamp().substring(0,16)));
-            }
-
-        }
-        listViewAdapter.notifyDataSetChanged();
+        // code that should be updated
         System.out.println("SYSTEMCHECKQ");
     }
 
@@ -89,6 +78,23 @@ public class FirstFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View first = inflater.inflate(R.layout.fragment_first, container, false);
+
+        Button refresh = (Button) first.findViewById(R.id.refresh);
+        refresh.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public  void onClick(View v)
+            {
+                for(Message m : user.getMessages()){
+
+                    subjects.add(String.format("From  -  %-" + (40 - m.getFrom().length()) +"s %20s", m.getFrom(), m.getTimestamp().substring(0,16)));
+
+                }
+                //Refresh button to refresh msglist
+            }
+
+        });
+
 
         Button logout = (Button) first.findViewById(R.id.logout1);
         logout.setOnClickListener(new View.OnClickListener() {
@@ -134,6 +140,11 @@ public class FirstFragment extends Fragment {
 
         final ListView messageList = (ListView) first.findViewById(R.id.msgList);
         subjects = new ArrayList<String>();
+        for(Message m : user.getMessages()){
+
+                subjects.add(String.format("From  -  %-" + (40 - m.getFrom().length()) +"s %20s", m.getFrom(), m.getTimestamp().substring(0,16)));
+
+        }
         listViewAdapter = new ArrayAdapter<String>(
                 getActivity(),android.R.layout.simple_list_item_1,subjects);
         messageList.setAdapter(listViewAdapter);
