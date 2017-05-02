@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -144,17 +145,20 @@ public class ThirdFragment extends Fragment {
 
             ArrayList<Message> msg = new ArrayList<Message>();
             ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>();
+            byte[] encoded = null;
+            byte[] encrypted = null;
             try {
                 KeyPair keyPair = buildKeyPair();
                 PublicKey pubKey = keyPair.getPublic();
                 PrivateKey privateKey = keyPair.getPrivate();
-
+                encrypted = encrypt(privateKey, message);
+                encoded = Base64.encodeBase64(encrypted);
             } catch (Exception e) {
-
+                System.out.println("Error in encrypting message");
             }
             nvp.add(new BasicNameValuePair("toid", idTo));
             nvp.add(new BasicNameValuePair("fromid", idFrom));
-            nvp.add(new BasicNameValuePair("text", message));
+            nvp.add(new BasicNameValuePair("text", new String(encoded)));
             nvp.add(new BasicNameValuePair("salt", key));
             InputStream is = null;
 
