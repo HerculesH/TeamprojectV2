@@ -6,27 +6,42 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+import java.io.RandomAccessFile;
 
 import com.kosalgeek.asynctask.AsyncResponse;
 import com.kosalgeek.asynctask.PostResponseAsyncTask;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 
 
 public class LoginActivity extends AppCompatActivity implements AsyncResponse{
 
     private EditText Name, Username, Password, Password2;
+    private byte[] salt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        PostResponseAsyncTask task = new PostResponseAsyncTask(this, new HashMap());
+        task.execute("http://54.148.185.237/readSalt.php");
 
     }
 
     @Override
     public void processFinish(String s) {
-        if (s.equals("registered")) {
+        if (s.contains("salt")) {
+            Pattern p = Pattern.compile("salt\n");
+            Matcher m = p.matcher(s);
+            s.replaceAll("salt\n", "");
+            salt = s.getBytes();
+        }
+        else if (s.equals("registered")) {
             //do something after register
             Toast.makeText(this, "Register successful", Toast.LENGTH_LONG).show();
         } else if (s.contains("Login Failed") == false) {
@@ -88,13 +103,36 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
 
 
         HashMap postData = new HashMap();
+        byte[] salt = getSalt();
+        byte[] passHash = hash(pass.toCharArray(), salt);
+        // String storeHash = "0x" + BitConverter.ToString(passHash).Replace("-", "");
+
         postData.put("name", name);
         postData.put("username", username);
-        postData.put("password", pass);
+        try { // NOTE - NEED TO FIGURE OUT WHAT ENCODING TO USE FOR PASSWORD STORING
+        postData.put("password", new String(passHash, "UTF-8")); } catch (Exception e) {}
         postData.put("valid", valid);
         PostResponseAsyncTask task = new PostResponseAsyncTask(this, postData);
         task.execute("http://54.148.185.237/registerUser.php");
 
+    }
+    public byte[] getSalt() {
+
+        return salt;
+    }
+    public byte[] hash(char[] password, byte[] salt) {
+        int ITERATIONS = 1000;
+        int KEY_LENGTH = 256;
+        PBEKeySpec spec = new PBEKeySpec(password, salt, ITERATIONS, KEY_LENGTH);
+        Arrays.fill(password, Character.MIN_VALUE);
+        try {
+            SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            return skf.generateSecret(spec).getEncoded();
+        } catch (Exception e) {
+            throw new Error("Error while hashing a password: " + e.getMessage(), e);
+        } finally {
+            spec.clearPassword();
+        }
     }
 
     public void swapToRegister(View view){
