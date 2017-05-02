@@ -5,6 +5,7 @@ package com.example.herchja.teamprojectv2;
  */
 
 public class Message {
+    private int id;
     private int toid;
     private String from;
     private String timestamp;
@@ -12,13 +13,21 @@ public class Message {
     private int state;
     private String salt;
 
-    public Message(int toid, String from, String text, String timestamp, String salt, int state) {
+
+
+    public Message(int id, int toid, String from, String text, String timestamp, String salt, int state) {
+        this.id = id;
         this.toid = toid;
         this.from = from;
         this.timestamp = timestamp;
+
         this.text = text;
         this.salt = salt;
         this.state = state;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getSalt() {

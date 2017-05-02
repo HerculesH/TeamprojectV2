@@ -2,7 +2,6 @@ package com.example.herchja.teamprojectv2;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -12,15 +11,9 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 
-import java.util.ArrayList;
-
 public class MainActivity extends FragmentActivity {
 
     static public ViewPager pager;
-    static public ArrayList<User> listItems = new ArrayList<User>();
-    static public ArrayList<String> msgItems = new ArrayList<String>();
-    static public DatabaseHandler db;
-    static public User eUser;
     static public int userChooser;
     static public SharedPreferencesHandler pref = new SharedPreferencesHandler();
     static public User user;
@@ -29,6 +22,7 @@ public class MainActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         String s = getIntent().getStringExtra("user");
@@ -39,29 +33,30 @@ public class MainActivity extends FragmentActivity {
             Toast.makeText(this, "Something went wrong!", Toast.LENGTH_LONG).show();
             System.exit(-1);
         }
-        //db = new DatabaseHandler("", "", "");
-
         SharedPreferences preferences = getApplicationContext().getSharedPreferences(user.getId(), MODE_PRIVATE);
         editor = preferences.edit();
 
-        MainActivity.pref.saveArray(MainActivity.listItems,editor,user.getId());
+        //thread implemenation for message refresh when logged in...
+        Thread t = new Thread() {
 
-        if(save.length() <= 2) {
+            @Override
+            public void run() {
+                try {
+                    while (!isInterrupted()) {
+                        Thread.sleep(1000);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                //user.
+                            }
+                        });
+                    }
+                } catch (InterruptedException e) {
+                }
+            }
+        };
 
-
-            eUser = new User("+ Add contact","");
-            listItems.add(eUser);
-
-        }
-        else
-        {
-            listItems = pref.getArray(this.getApplicationContext(),user.getId());
-        }
-
-        if(msgItems.isEmpty()) {
-            msgItems.add("new message");
-            //msgItems = user.getMessages();
-        }
+        t.start();
 
         pager = (ViewPager) findViewById(R.id.viewPager);
         pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));

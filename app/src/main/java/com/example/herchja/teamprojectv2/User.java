@@ -1,7 +1,5 @@
 package com.example.herchja.teamprojectv2;
 
-import com.kosalgeek.asynctask.AsyncResponse;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,7 +11,7 @@ import java.util.Arrays;
  * Created by akenf on 4/17/2017.
  */
 
-public class User implements AsyncResponse {
+public class User  {
     private static final int unread = 0;
     private static final int read = 1;
     private String username;
@@ -35,11 +33,14 @@ public class User implements AsyncResponse {
         JSONArray raw = data.getJSONArray("user");
         JSONObject contacts = raw.getJSONObject(1);
         String cont = contacts.getString("contacts");
-        //String cont = " hello hi";
-        contactList = new ArrayList<String>(Arrays.asList(cont.split(" ")));
+        contactList = new ArrayList<String>();
+        if(cont.equals("") == false){
+            contactList = new ArrayList<String>(Arrays.asList(cont.split(" ")));
+        }
+        contactList.add(0, "+ Add contact");
         for(int i = 2; i < raw.length(); i++){
             JSONObject mes = raw.getJSONObject(i);
-            Message temp = new Message(Integer.parseInt(this.id),  mes.getString("from"), mes.getString("text"),
+            Message temp = new Message(Integer.parseInt(mes.getString("id")), Integer.parseInt(this.id),  mes.getString("from"), mes.getString("text"),
                     mes.getString("time"), mes.getString("salt"), unread);
             messages.add(temp);
             System.out.println();
@@ -65,6 +66,22 @@ public class User implements AsyncResponse {
         return id;
     }
 
+    public ArrayList<String> getContactList() {
+        return contactList;
+    }
+
+    public void remContact(int ndx) {
+        contactList.remove(ndx);
+    }
+
+    public void setMessages(ArrayList<Message> messages) {
+        this.messages = messages;
+    }
+
+    public void setContact(String name, int ndx) {
+        contactList.set(ndx, name);
+    }
+
     public void setUsername(String name) {
         this.username = name;
     }
@@ -88,8 +105,4 @@ public class User implements AsyncResponse {
         messages.remove(ndx);
     }
 
-    @Override
-    public void processFinish(String s) {
-
-    }
 }
