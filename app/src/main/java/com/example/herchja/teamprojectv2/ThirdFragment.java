@@ -39,15 +39,14 @@ public class ThirdFragment extends Fragment {
     private ToggleButton ToggleTimer;
     private EditText Timerbox;
     private EditText msg;
-    private EditText subject;
     private EditText sendto;
     public String idTo, idFrom, message, key;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        MainActivity.v = inflater.inflate(R.layout.fragment_third, container, false);
+        View v = inflater.inflate(R.layout.fragment_third, container, false);
 
-        Button logout = (Button) MainActivity.v.findViewById(R.id.logout3);
+        Button logout = (Button) v.findViewById(R.id.logout3);
         logout.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -82,11 +81,11 @@ public class ThirdFragment extends Fragment {
             }
         });
 
-        sendto = (EditText) MainActivity.v.findViewById(R.id.editText6);
-        msg = (EditText) MainActivity.v.findViewById(R.id.MsgBox);
-        Timerbox = (EditText) MainActivity.v.findViewById(R.id.editText5);
+        sendto = (EditText) v.findViewById(R.id.editText6);
+        msg = (EditText) v.findViewById(R.id.MsgBox);
+        Timerbox = (EditText) v.findViewById(R.id.editText5);
 
-        sendmsg = (Button) MainActivity.v.findViewById(R.id.button);
+        sendmsg = (Button) v.findViewById(R.id.button);
         sendmsg.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -102,14 +101,13 @@ public class ThirdFragment extends Fragment {
                 Toast.makeText(getActivity(), "Message has been sent!", Toast.LENGTH_SHORT).show();
                 sendto.setText("");
                 msg.setText("");
-                subject.setText("");
 
             }
         });
 
         Timerbox.setFocusable(false);
 
-        ToggleTimer = (ToggleButton) MainActivity.v.findViewById(R.id.toggleButton);
+        ToggleTimer = (ToggleButton) v.findViewById(R.id.toggleButton);
         ToggleTimer.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -126,10 +124,10 @@ public class ThirdFragment extends Fragment {
             }
         });
 
-        TextView tv = (TextView) MainActivity.v.findViewById(R.id.tvFragThird);
+        TextView tv = (TextView) v.findViewById(R.id.tvFragThird);
         tv.setText(getArguments().getString("msg"));
 
-        return MainActivity.v;
+        return v;
     }
 
 

@@ -44,7 +44,6 @@ public class FirstFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View first = inflater.inflate(R.layout.fragment_first, container, false);
 
-
         Button logout = (Button) first.findViewById(R.id.logout1);
         logout.setOnClickListener(new View.OnClickListener() {
 
@@ -97,10 +96,10 @@ public class FirstFragment extends Fragment {
         for(Message m : user.getMessages()){
             subjects.add(String.format("From  -  %-" + (40 - m.getFrom().length()) +"s %20s", m.getFrom(), m.getTimestamp().substring(0,16)));
         }
-        final ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(
+        MainActivity.listViewAdapter = new ArrayAdapter<String>(
                 getActivity(),android.R.layout.simple_list_item_1,subjects);
-        messageList.setAdapter(listViewAdapter);
-        listViewAdapter.notifyDataSetChanged();
+        messageList.setAdapter(MainActivity.listViewAdapter);
+        MainActivity.listViewAdapter.notifyDataSetChanged();
 
         messageList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -128,7 +127,7 @@ public class FirstFragment extends Fragment {
 
                                 cd.setText("Message erased");
                                 txt.setText("");
-                                listViewAdapter.notifyDataSetChanged();
+                            MainActivity.listViewAdapter.notifyDataSetChanged();
 
                         }
                     }.start();
@@ -142,7 +141,7 @@ public class FirstFragment extends Fragment {
                             user.remMessage(position);
                             subjects.remove(position);
                             new delTask().execute();
-                            listViewAdapter.notifyDataSetChanged();
+                            MainActivity.listViewAdapter.notifyDataSetChanged();
                             numberOfContacts.setText(user.getMessages().size() + " Messages");
 
                         }
