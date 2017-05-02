@@ -1,10 +1,14 @@
 package com.example.herchja.teamprojectv2;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import java.io.RandomAccessFile;
 
@@ -32,6 +36,11 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
         setContentView(R.layout.activity_login);
         PostResponseAsyncTask task = new PostResponseAsyncTask(this, new HashMap());
         task.execute("http://54.148.185.237/readSalt.php");
+
+    }
+
+    @Override
+    public void onBackPressed() {
 
     }
 

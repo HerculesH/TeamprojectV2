@@ -1,8 +1,12 @@
 package com.example.herchja.teamprojectv2;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,16 +39,48 @@ public class ThirdFragment extends Fragment {
     private ToggleButton ToggleTimer;
     private EditText Timerbox;
     private EditText msg;
-    private EditText subject;
     private EditText sendto;
-    public static View v;
     public String idTo, idFrom, message, key;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_third, container, false);
+        View v = inflater.inflate(R.layout.fragment_third, container, false);
 
-        subject = (EditText) v.findViewById(R.id.SubBox);
+        Button logout = (Button) v.findViewById(R.id.logout3);
+        logout.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                MainActivity.alertDialog = new AlertDialog.Builder(v.getContext());
+                MainActivity.alertDialog .setTitle("Logout");
+                final TextView input = new TextView(getContext());
+                input.setTextSize(18);
+                input.setGravity(Gravity.CENTER | Gravity.BOTTOM);
+
+                input.setText("Are you sure you want to logout?");
+
+                MainActivity.alertDialog.setView(input);
+                MainActivity.alertDialog.setCancelable(true);
+                MainActivity.alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Intent intent = new Intent(getContext(), LoginActivity.class);
+                        startActivity(intent);
+
+                    }
+                });
+
+                MainActivity.alertDialog .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                MainActivity.alertDialog .show();
+
+            }
+        });
+
         sendto = (EditText) v.findViewById(R.id.editText6);
         msg = (EditText) v.findViewById(R.id.MsgBox);
         Timerbox = (EditText) v.findViewById(R.id.editText5);
@@ -65,7 +101,6 @@ public class ThirdFragment extends Fragment {
                 Toast.makeText(getActivity(), "Message has been sent!", Toast.LENGTH_SHORT).show();
                 sendto.setText("");
                 msg.setText("");
-                subject.setText("");
 
             }
         });

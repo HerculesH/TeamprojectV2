@@ -2,15 +2,19 @@ package com.example.herchja.teamprojectv2;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,21 +33,57 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import static com.example.herchja.teamprojectv2.MainActivity.sendmsg;
 import static com.example.herchja.teamprojectv2.MainActivity.user;
 
 public class FirstFragment extends Fragment {
 
-    public AlertDialog.Builder alertDialog;
     private int idMes;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_first, container, false);
+        View first = inflater.inflate(R.layout.fragment_first, container, false);
 
-        final TextView numberOfContacts = (TextView) v.findViewById(R.id.textView4);
+        Button logout = (Button) first.findViewById(R.id.logout1);
+        logout.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                MainActivity.alertDialog  = new AlertDialog.Builder(v.getContext());
+                MainActivity.alertDialog .setTitle("Logout");
+                final TextView input = new TextView(getContext());
+                input.setTextSize(18);
+                input.setGravity(Gravity.CENTER | Gravity.BOTTOM);
+
+                input.setText("Are you sure you want to logout?");
+
+                MainActivity.alertDialog.setView(input);
+                MainActivity.alertDialog.setCancelable(true);
+                MainActivity.alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Intent intent = new Intent(getContext(), LoginActivity.class);
+                        startActivity(intent);
+
+                    }
+                });
+
+                MainActivity.alertDialog .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+                    }
+                });
+                MainActivity.alertDialog .show();
+
+            }
+        });
+
+        final TextView numberOfContacts = (TextView) first.findViewById(R.id.textView4);
         numberOfContacts.setText(user.messages.size() + " Messages");
 
-        TextView tv = (TextView) v.findViewById(R.id.tvFragFirst);
+        TextView tv = (TextView) first.findViewById(R.id.tvFragFirst);
         tv.setText(getArguments().getString("msg"));
 
         if(user.messages.isEmpty() != true)
@@ -51,14 +91,15 @@ public class FirstFragment extends Fragment {
             Toast.makeText(getActivity(), "New message(s)!", Toast.LENGTH_SHORT).show();
         }
 
-        final ListView messageList = (ListView) v.findViewById(R.id.msgList);
+        final ListView messageList = (ListView) first.findViewById(R.id.msgList);
         final ArrayList<String> subjects = new ArrayList<String>();
         for(Message m : user.getMessages()){
             subjects.add(String.format("From  -  %-" + (40 - m.getFrom().length()) +"s %20s", m.getFrom(), m.getTimestamp().substring(0,16)));
         }
-        final ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(
+        MainActivity.listViewAdapter = new ArrayAdapter<String>(
                 getActivity(),android.R.layout.simple_list_item_1,subjects);
-        messageList.setAdapter(listViewAdapter);
+        messageList.setAdapter(MainActivity.listViewAdapter);
+        MainActivity.listViewAdapter.notifyDataSetChanged();
 
         messageList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -67,7 +108,7 @@ public class FirstFragment extends Fragment {
 
                 if (position != 99) {
 
-                    alertDialog = new AlertDialog.Builder(v.getContext());
+                    MainActivity.alertDialog = new AlertDialog.Builder(v.getContext());
                     LayoutInflater factory = LayoutInflater.from(v.getContext());
                     final View view = factory.inflate(R.layout.fragment_msg_viewer, null);
 
@@ -86,39 +127,43 @@ public class FirstFragment extends Fragment {
 
                                 cd.setText("Message erased");
                                 txt.setText("");
-                                listViewAdapter.notifyDataSetChanged();
+                            MainActivity.listViewAdapter.notifyDataSetChanged();
 
                         }
                     }.start();
 
 
-                    alertDialog.setView(view);
-                    alertDialog.setCancelable(true);
-                    alertDialog.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                    MainActivity.alertDialog.setView(view);
+                    MainActivity.alertDialog.setCancelable(true);
+                    MainActivity.alertDialog.setPositiveButton("Done", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             idMes = user.getMessages().get(position).getId();
                             user.remMessage(position);
                             subjects.remove(position);
                             new delTask().execute();
-                            listViewAdapter.notifyDataSetChanged();
+                            MainActivity.listViewAdapter.notifyDataSetChanged();
                             numberOfContacts.setText(user.getMessages().size() + " Messages");
 
                         }
                     });
 
-                    alertDialog.setNegativeButton("Reply", new DialogInterface.OnClickListener() {
+                    MainActivity.alertDialog.setNegativeButton("Reply", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+
+                            MainActivity.sendmsg = (EditText) MainActivity.v.findViewById(R.id.editText6);
+                            sendmsg.setText("test");
+                            MainActivity.pager.setCurrentItem(2,true);
+
                         }
                     });
-                    alertDialog.show();
+                    MainActivity.alertDialog.show();
                 }
 
 
             }
         });
 
-        return v;
+        return first;
     }
 
     public static FirstFragment newInstance(String text) {
