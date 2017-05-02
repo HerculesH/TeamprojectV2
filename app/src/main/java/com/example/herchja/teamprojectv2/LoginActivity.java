@@ -1,14 +1,10 @@
 package com.example.herchja.teamprojectv2;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kosalgeek.asynctask.AsyncResponse;
@@ -38,6 +34,9 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
         if (s.equals("registered")) {
             //do something after register
             Toast.makeText(this, "Register successful", Toast.LENGTH_LONG).show();
+        } else if (s.equals("exists") || s.equals("Unable to insert values.")) {
+            Toast.makeText(this, "User already exists", Toast.LENGTH_LONG).show();
+
         } else if (s.contains("Login Failed") == false) {
             if (s.contains("User is blocked") == false) {
                 Intent intent = new Intent(this, MainActivity.class);

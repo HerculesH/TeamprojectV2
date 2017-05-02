@@ -5,11 +5,11 @@
     <string name="section_format">Page %1$d</string>
     <string name="button_send">login</string>
     <string name="edit_message">Enter your account ID</string>
-    <string name="edit_password">Enter account password</string>
+    <string name="edit_password">Enter your password</string>
     <string name="Account_ID">Account ID:</string>
     <string name="Account_password">Password:</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="Contact_admin">Request Account</string>
+    <string name="Contact_admin">New User</string>
     <string name="Sendmgs">Send</string>
     <string name="SendmsgID">Add recipent name</string>
     <string name="encryptmsg">Set a message timer</string>
