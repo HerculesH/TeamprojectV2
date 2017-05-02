@@ -197,11 +197,17 @@ public class FirstFragment extends Fragment {
                     });
 
                     MainActivity.alertDialog.setNegativeButton("Reply", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
+                        public void onClick(final DialogInterface dialog, int which) {
 
-                            final EditText sendmsg = (EditText) ThirdFragment.v.findViewById(R.id.editText6);
-                            sendmsg.setText("test");
-                            MainActivity.pager.setCurrentItem(2,true);
+                            SecondFragment.sendmsg(user.getMessages().get(position).getFrom());
+                            ThirdFragment.setMsg(user.getMessages().get(position).getFrom());
+
+                            idMes = user.getMessages().get(position).getId();
+                            user.remMessage(position);
+                            subjects.remove(position);
+                            new delTask().execute();
+                            listViewAdapter.notifyDataSetChanged();
+                            numberOfContacts.setText(user.getMessages().size() + " Messages");
 
                         }
                     });
@@ -213,12 +219,6 @@ public class FirstFragment extends Fragment {
         });
 
         return first;
-    }
-
-    public void refreshFrag()
-    {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.detach(this).attach(this).commit();
     }
 
     public static FirstFragment newInstance(String text) {

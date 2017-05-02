@@ -39,7 +39,7 @@ public class ThirdFragment extends Fragment {
     private ToggleButton ToggleTimer;
     private EditText Timerbox;
     private EditText msg;
-    private EditText sendto;
+    public static EditText sendto;
     public String idTo, idFrom, message, key;
     public static View v;
 
@@ -168,6 +168,10 @@ public class ThirdFragment extends Fragment {
         }
     }
 
+    public static void setMsg(String name)
+    {
+        sendto.setText(name);
+    }
 
     public static ThirdFragment newInstance(String text) {
 
