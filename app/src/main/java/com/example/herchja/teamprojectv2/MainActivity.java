@@ -1,12 +1,21 @@
 package com.example.herchja.teamprojectv2;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -19,6 +28,42 @@ public class MainActivity extends FragmentActivity {
     static public User user;
     static public String save;
     static public  SharedPreferences.Editor editor;
+    static public AlertDialog.Builder alertDialog;
+    static public EditText sendmsg;
+    public static View v;
+
+    @Override
+    public void onBackPressed() {
+
+        alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle("Logout");
+        final TextView input = new TextView(this);
+        input.setTextSize(18);
+        input.setGravity(Gravity.CENTER | Gravity.BOTTOM);
+
+        input.setText("Are you sure you want to logout?");
+
+        alertDialog.setView(input);
+        alertDialog.setCancelable(true);
+        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+        alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.dismiss();
+            }
+        });
+        alertDialog.show();
+
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

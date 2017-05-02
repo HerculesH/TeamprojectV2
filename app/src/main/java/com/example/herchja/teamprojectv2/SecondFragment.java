@@ -2,14 +2,17 @@ package com.example.herchja.teamprojectv2;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -30,6 +33,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import static android.widget.AdapterView.OnItemClickListener;
+import static com.example.herchja.teamprojectv2.MainActivity.sendmsg;
 import static com.example.herchja.teamprojectv2.MainActivity.user;
 
 public class SecondFragment extends Fragment {
@@ -42,6 +46,42 @@ public class SecondFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_second, container, false);
+
+        Button logout = (Button) v.findViewById(R.id.logout2);
+        logout.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                MainActivity.alertDialog  = new AlertDialog.Builder(v.getContext());
+                MainActivity.alertDialog .setTitle("Logout");
+                final TextView input = new TextView(getContext());
+                input.setTextSize(18);
+                input.setGravity(Gravity.CENTER | Gravity.BOTTOM);
+
+                input.setText("Are you sure you want to logout?");
+
+                MainActivity.alertDialog .setView(input);
+                MainActivity.alertDialog .setCancelable(true);
+                MainActivity.alertDialog .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Intent intent = new Intent(getContext(), LoginActivity.class);
+                        startActivity(intent);
+
+                    }
+                });
+
+                MainActivity.alertDialog .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                MainActivity.alertDialog .show();
+
+            }
+        });
+
         final TextView numberOfContacts = (TextView) v.findViewById(R.id.ContactsCounter);
         numberOfContacts.setText(numContacts + " Contacts");
 
@@ -136,8 +176,8 @@ public class SecondFragment extends Fragment {
                     alertDialog.setCancelable(true);
                     alertDialog.setPositiveButton("Send Message", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            final EditText transfer = (EditText) ThirdFragment.v.findViewById(R.id.editText6);
-                            transfer.setText(user.getContactList().get(position));
+                            MainActivity.sendmsg = (EditText) MainActivity.v.findViewById(R.id.editText6);
+                            sendmsg.setText(user.getContactList().get(position));
                             MainActivity.pager.setCurrentItem(2,true);
                         }
                     });
