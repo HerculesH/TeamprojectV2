@@ -60,12 +60,21 @@ public class FirstFragment extends Fragment {
                     }
                 });
             }
-        }, 0, 15000); // updates each 40 secs
+        }, 0, 5000);
     }
 
     private void updateLists(){
+
         for(Message m : user.getMessages()){
-            subjects.add(String.format("From  -  %-" + (40 - m.getFrom().length()) +"s %20s", m.getFrom(), m.getTimestamp().substring(0,16)));
+            if(subjects.contains(m))
+            {
+
+            }
+            else
+            {
+                subjects.add(String.format("From  -  %-" + (40 - m.getFrom().length()) +"s %20s", m.getFrom(), m.getTimestamp().substring(0,16)));
+            }
+
         }
         listViewAdapter.notifyDataSetChanged();
         System.out.println("SYSTEMCHECKQ");
@@ -179,7 +188,7 @@ public class FirstFragment extends Fragment {
                     MainActivity.alertDialog.setNegativeButton("Reply", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
 
-                            MainActivity.sendmsg = (EditText) MainActivity.v.findViewById(R.id.editText6);
+                            final EditText sendmsg = (EditText) ThirdFragment.v.findViewById(R.id.editText6);
                             sendmsg.setText("test");
                             MainActivity.pager.setCurrentItem(2,true);
 

@@ -36,7 +36,6 @@ public class MainActivity extends FragmentActivity {
     static public SharedPreferences.Editor editor;
     static public AlertDialog.Builder alertDialog;
     static public EditText sendmsg;
-    public static View v;
 
     @Override
     public void onBackPressed() {
