@@ -176,8 +176,7 @@ public class SecondFragment extends Fragment {
                     alertDialog.setCancelable(true);
                     alertDialog.setPositiveButton("Send Message", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            MainActivity.sendmsg = (EditText) MainActivity.v.findViewById(R.id.editText6);
-                            sendmsg.setText(user.getContactList().get(position));
+                            sendmsg(user.getContactList().get(position));
                             MainActivity.pager.setCurrentItem(2,true);
                         }
                     });
@@ -219,6 +218,13 @@ public class SecondFragment extends Fragment {
         f.setArguments(b);
 
         return f;
+    }
+
+    public static void sendmsg(String name)
+    {
+        final EditText sendmsg = (EditText) ThirdFragment.v.findViewById(R.id.editText6);
+        sendmsg .setText(name);
+        MainActivity.pager.setCurrentItem(2,true);
     }
 
     class contactTask extends AsyncTask<Void, Void, Void> {

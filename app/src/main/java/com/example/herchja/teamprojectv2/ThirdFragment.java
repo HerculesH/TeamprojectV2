@@ -45,12 +45,13 @@ public class ThirdFragment extends Fragment {
     private ToggleButton ToggleTimer;
     private EditText Timerbox;
     private EditText msg;
-    private EditText sendto;
+    public static EditText sendto;
     public String idTo, idFrom, message, key;
+    public static View v;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_third, container, false);
+        v = inflater.inflate(R.layout.fragment_third, container, false);
 
         Button logout = (Button) v.findViewById(R.id.logout3);
         logout.setOnClickListener(new View.OnClickListener() {
@@ -222,6 +223,10 @@ public class ThirdFragment extends Fragment {
 
     }
 
+    public static void setMsg(String name)
+    {
+        sendto.setText(name);
+    }
 
     public static ThirdFragment newInstance(String text) {
 
