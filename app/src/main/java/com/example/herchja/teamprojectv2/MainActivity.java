@@ -15,6 +15,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -36,35 +37,6 @@ public class MainActivity extends FragmentActivity {
     static public AlertDialog.Builder alertDialog;
     static public EditText sendmsg;
     public static View v;
-    public static ArrayAdapter<String> listViewAdapter;
-    private Timer autoUpdate;
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        autoUpdate = new Timer();
-        autoUpdate.schedule(new TimerTask() {
-
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        updateLists();
-                    }
-                });
-            }
-        }, 0, 15000); // updates each 40 secs
-    }
-
-    private void updateLists(){
-
-    }
-
-    @Override
-    public void onPause() {
-        autoUpdate.cancel();
-        super.onPause();
-    }
 
     @Override
     public void onBackPressed() {

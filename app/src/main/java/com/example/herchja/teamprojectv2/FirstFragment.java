@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,8 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.example.herchja.teamprojectv2.MainActivity.sendmsg;
 import static com.example.herchja.teamprojectv2.MainActivity.user;
@@ -39,6 +42,40 @@ import static com.example.herchja.teamprojectv2.MainActivity.user;
 public class FirstFragment extends Fragment {
 
     private int idMes;
+    private Timer autoUpdate;
+    public ArrayAdapter<String> listViewAdapter;
+    private  ArrayList<String> subjects;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        autoUpdate = new Timer();
+        autoUpdate.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        updateLists();
+                    }
+                });
+            }
+        }, 0, 15000); // updates each 40 secs
+    }
+
+    private void updateLists(){
+        for(Message m : user.getMessages()){
+            subjects.add(String.format("From  -  %-" + (40 - m.getFrom().length()) +"s %20s", m.getFrom(), m.getTimestamp().substring(0,16)));
+        }
+        listViewAdapter.notifyDataSetChanged();
+        System.out.println("SYSTEMCHECKQ");
+    }
+
+    @Override
+    public void onPause() {
+        autoUpdate.cancel();
+        super.onPause();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -86,20 +123,12 @@ public class FirstFragment extends Fragment {
         TextView tv = (TextView) first.findViewById(R.id.tvFragFirst);
         tv.setText(getArguments().getString("msg"));
 
-        if(user.messages.isEmpty() != true)
-        {
-            Toast.makeText(getActivity(), "New message(s)!", Toast.LENGTH_SHORT).show();
-        }
-
         final ListView messageList = (ListView) first.findViewById(R.id.msgList);
-        final ArrayList<String> subjects = new ArrayList<String>();
-        for(Message m : user.getMessages()){
-            subjects.add(String.format("From  -  %-" + (40 - m.getFrom().length()) +"s %20s", m.getFrom(), m.getTimestamp().substring(0,16)));
-        }
-        MainActivity.listViewAdapter = new ArrayAdapter<String>(
+        subjects = new ArrayList<String>();
+        listViewAdapter = new ArrayAdapter<String>(
                 getActivity(),android.R.layout.simple_list_item_1,subjects);
-        messageList.setAdapter(MainActivity.listViewAdapter);
-        MainActivity.listViewAdapter.notifyDataSetChanged();
+        messageList.setAdapter(listViewAdapter);
+        listViewAdapter.notifyDataSetChanged();
 
         messageList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -127,7 +156,7 @@ public class FirstFragment extends Fragment {
 
                                 cd.setText("Message erased");
                                 txt.setText("");
-                            MainActivity.listViewAdapter.notifyDataSetChanged();
+                            listViewAdapter.notifyDataSetChanged();
 
                         }
                     }.start();
@@ -141,7 +170,7 @@ public class FirstFragment extends Fragment {
                             user.remMessage(position);
                             subjects.remove(position);
                             new delTask().execute();
-                            MainActivity.listViewAdapter.notifyDataSetChanged();
+                            listViewAdapter.notifyDataSetChanged();
                             numberOfContacts.setText(user.getMessages().size() + " Messages");
 
                         }
@@ -164,6 +193,12 @@ public class FirstFragment extends Fragment {
         });
 
         return first;
+    }
+
+    public void refreshFrag()
+    {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this).attach(this).commit();
     }
 
     public static FirstFragment newInstance(String text) {

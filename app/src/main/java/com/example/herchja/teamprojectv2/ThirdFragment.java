@@ -41,10 +41,11 @@ public class ThirdFragment extends Fragment {
     private EditText msg;
     private EditText sendto;
     public String idTo, idFrom, message, key;
+    public static View v;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_third, container, false);
+        v = inflater.inflate(R.layout.fragment_third, container, false);
 
         Button logout = (Button) v.findViewById(R.id.logout3);
         logout.setOnClickListener(new View.OnClickListener() {

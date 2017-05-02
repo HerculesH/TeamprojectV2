@@ -176,8 +176,8 @@ public class SecondFragment extends Fragment {
                     alertDialog.setCancelable(true);
                     alertDialog.setPositiveButton("Send Message", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            MainActivity.sendmsg = (EditText) MainActivity.v.findViewById(R.id.editText6);
-                            sendmsg.setText(user.getContactList().get(position));
+                            final EditText sendmsg = (EditText) ThirdFragment.v.findViewById(R.id.editText6);
+                            sendmsg .setText(user.getContactList().get(position));
                             MainActivity.pager.setCurrentItem(2,true);
                         }
                     });
