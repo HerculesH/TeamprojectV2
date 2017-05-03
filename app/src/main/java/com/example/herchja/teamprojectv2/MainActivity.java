@@ -41,13 +41,15 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONException;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+/**
+ * MainActivity class which handles the fragments in the app and the user information while logging in
+ */
 public class MainActivity extends FragmentActivity {
 
 
@@ -60,6 +62,9 @@ public class MainActivity extends FragmentActivity {
     private int wait = 0;
 
 
+    /**
+     * Makes sure the user securely restarts the application when pressing the back button while being logged in
+     */
     @Override
     public void onBackPressed() {
 
@@ -91,7 +96,10 @@ public class MainActivity extends FragmentActivity {
 
     }
 
-
+    /**
+     * Creates the instance of the class
+     * @param savedInstanceState The instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -152,6 +160,9 @@ public class MainActivity extends FragmentActivity {
         pager.setCurrentItem(1);
     }
 
+    /**
+     * The class which sets up the fragment connections of FirstFragment,SecondFragment and ThirdFragment
+     */
 
     private class MyPagerAdapter extends FragmentPagerAdapter {
 
@@ -177,6 +188,10 @@ public class MainActivity extends FragmentActivity {
             return 3;
         }
     }
+
+    /**
+     * Takes the username when logging and checks it with what the lampstack has
+     */
     class getTask extends AsyncTask<Void, Void, Void> {
         protected Void doInBackground(Void... params) {
 

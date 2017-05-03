@@ -27,6 +27,9 @@ import javax.crypto.Cipher;
  * Created by akenf on 4/17/2017.
  */
 
+/**
+ * Handles user information as a user object in the app and on the server
+ */
 public class User {
     private String username;
     private String id;

@@ -58,6 +58,9 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
 
     }
 
+    /**
+     * Makes sure that if the user hits the back button the app closes
+     */
     @Override
     public void onBackPressed() {
         System.exit(0);

@@ -35,17 +35,33 @@ import java.util.ArrayList;
 import static android.widget.AdapterView.OnItemClickListener;
 import static com.example.herchja.teamprojectv2.MainActivity.user;
 
+/**
+ * The second fragment which handles the contact listView object and the first screen the user sees when logging in
+ */
 public class SecondFragment extends Fragment {
 
+    /**
+     * Variables to store information like the contact list size or edit information as well as contact index
+     */
     private int numContacts = user.getContactList().size()-1;
     private String contactEdit = "";
     private String cmd = "";
     private int index = 0;
 
+    /**
+     * Creates the instance of the fragment
+     * @param inflater the view inflater
+     * @param container the view container
+     * @param savedInstanceState the instance of the view
+     * @return returns the correct view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_second, container, false);
 
+        /**
+         * creates a logout button which properly logs the user out
+         */
         Button logout = (Button) v.findViewById(R.id.logout2);
         logout.setOnClickListener(new View.OnClickListener() {
 
@@ -79,12 +95,21 @@ public class SecondFragment extends Fragment {
             }
         });
 
+        /**
+         * Changes the contact display depending on contacts created by the user
+         */
         final TextView numberOfContacts = (TextView) v.findViewById(R.id.ContactsCounter);
         numberOfContacts.setText(numContacts + " Contacts");
 
+        /**
+         * Displays the fragment name
+         */
         TextView tv = (TextView) v.findViewById(R.id.tvFragSecond);
         tv.setText(getArguments().getString("msg"));
 
+        /**
+         * Creates the listView and the listView adapter to handle tap events similarly to the message listView
+         */
         ListView listView = (ListView) v.findViewById(R.id.mainMenu);
         final ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(
                 getActivity(),android.R.layout.simple_list_item_1,user.getContactList());
@@ -95,6 +120,9 @@ public class SecondFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View v,
                                     final int position, final long id) {
 
+                /**
+                 * Creates a event when tapping on the first item in the listView which is named create contact to create more contacts otherwise if tapping on another element other than 0 shows the detailed contact information to the user
+                 */
                 if (position == 0) {
 
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(v.getContext());
@@ -199,6 +227,11 @@ public class SecondFragment extends Fragment {
         return v;
     }
 
+    /**
+     * Creates the instance of the fragment
+     * @param text gets the name of the fragment
+     * @return returns the fragment
+     */
     public static SecondFragment newInstance(String text) {
 
         SecondFragment f = new SecondFragment();
@@ -210,6 +243,10 @@ public class SecondFragment extends Fragment {
         return f;
     }
 
+    /**
+     * Send message method which helps the user quickly reply from the FirstFragment to the ThirdFragment
+     * @param name
+     */
     public static void sendmsg(String name)
     {
         final EditText sendmsg = (EditText) ThirdFragment.v.findViewById(R.id.editText6);
@@ -217,6 +254,9 @@ public class SecondFragment extends Fragment {
         MainActivity.pager.setCurrentItem(2,true);
     }
 
+    /**
+     * Background information handling for user login
+     */
     class contactTask extends AsyncTask<Void, Void, Void> {
         protected Void doInBackground(Void... params) {
 

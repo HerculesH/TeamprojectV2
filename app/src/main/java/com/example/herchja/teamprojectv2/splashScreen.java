@@ -5,6 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+/**
+ * The splash screen which is being displayed in the beginning of the app
+ * The splash screen lenght is set to 2 seconds before going to the LoginActivity screen
+ */
 public class splashScreen extends Activity {
 
     private final int SPLASH_DISPLAY_LENGTH = 2000;

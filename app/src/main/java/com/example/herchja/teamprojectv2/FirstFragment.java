@@ -37,6 +37,9 @@ import java.util.TimerTask;
 
 import static com.example.herchja.teamprojectv2.MainActivity.user;
 
+/**
+ * The first fragment which is the recieve message screen of the application
+ */
 public class FirstFragment extends Fragment {
 
     private int idMes;
@@ -44,6 +47,9 @@ public class FirstFragment extends Fragment {
     public ArrayAdapter<String> listViewAdapter;
     private  ArrayList<String> subjects;
 
+    /**
+     * sets a continous update TimerTask which refreshes the messages being sent to the user
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -61,6 +67,9 @@ public class FirstFragment extends Fragment {
         }, 0, 15000); // updates each 40 secs
     }
 
+    /**
+     * The method which is being called from the TimerTask
+     */
     private void updateLists(){
         subjects.clear();
         for(Message m : user.getMessages()){
@@ -69,12 +78,22 @@ public class FirstFragment extends Fragment {
         listViewAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Handles the event if the app is being paused
+     */
     @Override
     public void onPause() {
         autoUpdate.cancel();
         super.onPause();
     }
 
+    /**
+     * Creates the first instance of the fragment
+     * @param inflater Makes sure that the view is being displayed correctly
+     * @param container Hanles the container which the view is being stored in
+     * @param savedInstanceState Is the instance of the fragment
+     * @return returns the fragment to the Activity
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View first = inflater.inflate(R.layout.fragment_first, container, false);
@@ -82,6 +101,10 @@ public class FirstFragment extends Fragment {
         Button logout = (Button) first.findViewById(R.id.logout1);
         logout.setOnClickListener(new View.OnClickListener() {
 
+            /**
+             *  Handles the widget when the user clicks on logout
+             * @param v returns a alertdialog
+             */
             @Override
             public void onClick(View v) {
 
@@ -114,12 +137,21 @@ public class FirstFragment extends Fragment {
             }
         });
 
+        /**
+         * Displays the correct number of contacts to the user
+         */
         final TextView numberOfContacts = (TextView) first.findViewById(R.id.textView4);
         numberOfContacts.setText(user.messages.size() + " Messages");
 
+        /**
+         * Displays the name of the fragment to the user
+         */
         TextView tv = (TextView) first.findViewById(R.id.tvFragFirst);
         tv.setText(getArguments().getString("msg"));
 
+        /**
+         * Creates a ListView and a ListViewAdapter to store the messages being sent to the user
+         */
         final ListView messageList = (ListView) first.findViewById(R.id.msgList);
         subjects = new ArrayList<String>();
         listViewAdapter = new ArrayAdapter<String>(
@@ -128,11 +160,21 @@ public class FirstFragment extends Fragment {
         listViewAdapter.notifyDataSetChanged();
 
         messageList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            /**
+             * Handles the case if someone taps on the listView objects
+             * @param parent the parent view
+             * @param v the view
+             * @param position the position of each object in the view
+             * @param id the id of objects
+             */
             @Override
             public void onItemClick(AdapterView<?> parent, View v,
                                     final int position, final long id) {
 
-                if (position != 99) {
+                /**
+                 * If a user taps on a position which is not 999999999 in the view the user will have the message displayed to him from the sender
+                 */
+                if (position != 999999999) {
 
                     MainActivity.alertDialog = new AlertDialog.Builder(v.getContext());
                     LayoutInflater factory = LayoutInflater.from(v.getContext());
@@ -146,6 +188,9 @@ public class FirstFragment extends Fragment {
                     if(user.getMessages().get(position).getTimer() != 0){
                         countdown = 1000 * (user.getMessages().get(position).getTimer());
                     }
+                    /**
+                     * A timer which deletes the message after a certain amount of time
+                     */
                     new CountDownTimer(countdown,1000) {
 
                         public void onTick(long millisUntilFinished) {
@@ -161,7 +206,9 @@ public class FirstFragment extends Fragment {
                         }
                     }.start();
 
-
+                    /**
+                     * Handles the Done or reply button event by the user and deletes the message from the ListView and either takes the user to the ThirdFragment to reply or nothing at all
+                     */
                     MainActivity.alertDialog.setView(view);
                     MainActivity.alertDialog.setCancelable(true);
                     MainActivity.alertDialog.setPositiveButton("Done", new DialogInterface.OnClickListener() {
@@ -199,6 +246,11 @@ public class FirstFragment extends Fragment {
         return first;
     }
 
+    /**
+     * Names the Firstfragment of the user
+     * @param text name of fragment
+     * @return returns the fragment name
+     */
     public static FirstFragment newInstance(String text) {
 
         FirstFragment f = new FirstFragment();
@@ -209,6 +261,10 @@ public class FirstFragment extends Fragment {
 
         return f;
     }
+
+    /**
+     * Handles user information in the backend like updating messages
+     */
     class delTask extends AsyncTask<Void, Void, Void> {
         protected Void doInBackground(Void... params) {
 
