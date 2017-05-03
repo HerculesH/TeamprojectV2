@@ -16,9 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.kosalgeek.asynctask.AsyncResponse;
-import com.kosalgeek.asynctask.PostResponseAsyncTask;
-
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -33,16 +30,9 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.KeyFactory;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.RSAPrivateKeySpec;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.ArrayList;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.util.HashMap;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.util.ArrayList;
 
 import javax.crypto.Cipher;
 
@@ -236,9 +226,6 @@ public class ThirdFragment extends Fragment{
             cipher.init(Cipher.ENCRYPT_MODE, privateKey);
             return cipher.doFinal(message.getBytes());
         }
-
-
-
     }
 
     public static void setMsg(String name)
@@ -247,7 +234,6 @@ public class ThirdFragment extends Fragment{
     }
 
     public static ThirdFragment newInstance(String text) {
-
 
         ThirdFragment f = new ThirdFragment();
         Bundle b = new Bundle();

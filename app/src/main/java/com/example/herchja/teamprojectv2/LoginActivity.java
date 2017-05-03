@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-import java.io.RandomAccessFile;
 
 import com.kosalgeek.asynctask.AsyncResponse;
 import com.kosalgeek.asynctask.PostResponseAsyncTask;
@@ -15,8 +14,7 @@ import org.apache.commons.codec.binary.Base64;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
@@ -43,7 +41,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
 
     @Override
     public void onBackPressed() {
-
+        System.exit(0);
     }
 
     /**
@@ -82,23 +80,30 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
      */
     public void login(View view)
     {
+
         // get the information
         Username = (EditText) findViewById(R.id.editText);
         Password = (EditText) findViewById(R.id.editText2);
         View Error = findViewById(R.id.LoginError);
-        byte[] salt = getSalt();
-        byte[] hash = hash(Password.getText().toString().toCharArray(), salt);
-        byte[] encode = Base64.encodeBase64(hash);
 
+
+        if(Username.getText().toString().isEmpty() || Password.getText().toString().isEmpty()){
+            Toast.makeText(this, "Please fill in empty fields", Toast.LENGTH_LONG).show();
+        }
         // store the data into a hashmap for the phpscript to read
-        HashMap postData = new HashMap();
-        postData.put("mobile", "android");
-        postData.put("txtUsername", Username.getText().toString());
-        postData.put("txtPassword", new String(encode));
+        else {
+            byte[] salt = getSalt();
+            byte[] hash = hash(Password.getText().toString().toCharArray(), salt);
+            byte[] encode = Base64.encodeBase64(hash);
+            HashMap postData = new HashMap();
+            postData.put("mobile", "android");
+            postData.put("txtUsername", Username.getText().toString());
+            postData.put("txtPassword", new String(encode));
 
-        // execute the Asynchroized task with data from the hashmap.
-        PostResponseAsyncTask task = new PostResponseAsyncTask(this, postData);
-        task.execute("http://54.148.185.237/login.php");
+            // execute the Asynchroized task with data from the hashmap.
+            PostResponseAsyncTask task = new PostResponseAsyncTask(this, postData);
+            task.execute("http://54.148.185.237/login.php");
+        }
 
     }
 

@@ -16,23 +16,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.kosalgeek.asynctask.AsyncResponse;
-import com.kosalgeek.asynctask.PostResponseAsyncTask;
-
-import org.json.JSONException;
-
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.crypto.Cipher;
-
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -115,15 +98,6 @@ public class MainActivity extends FragmentActivity {
         SharedPreferences preferences = getApplicationContext().getSharedPreferences(user.getId(), MODE_PRIVATE);
         editor = preferences.edit();
         username = user.getUsername();
-        /*
-        new getTask().execute();
-        while(wait == 0){}
-        try {
-            user.setMessages(mess);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        */
         //thread implemenation for message refresh when logged in...
 
         Thread t = new Thread() {
@@ -166,7 +140,6 @@ public class MainActivity extends FragmentActivity {
 
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
-
         }
 
         @Override
@@ -204,11 +177,8 @@ public class MainActivity extends FragmentActivity {
                 String line = null;
                 while ((line = reader.readLine()) != null)
                     sb.append(line + "\n");
-
                 is.close();
                 mess = sb.toString();
-
-
             } catch (Exception e) {
                 System.out.println("Error in getting messages: " + e.getMessage());
 
