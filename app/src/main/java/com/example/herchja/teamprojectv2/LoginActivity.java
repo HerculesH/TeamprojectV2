@@ -20,7 +20,9 @@ import java.util.regex.Pattern;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
-
+/**
+ * This will handle activity that is going on during the login process.
+ */
 public class LoginActivity extends AppCompatActivity implements AsyncResponse{
 
     private EditText Name, Username, Password, Password2;
@@ -120,7 +122,6 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
         p2 = Password2.getText().toString();
 
         // add in parameter checking (ex. length pass, etc)
-
         if(n.length() > 1){
             if(p.equals(p2)){ // if password passes the check, register the user and switch views
                 registerUser(n, u, p, "0");

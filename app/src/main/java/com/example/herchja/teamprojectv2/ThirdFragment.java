@@ -45,10 +45,11 @@ import java.security.PublicKey;
 import java.util.HashMap;
 
 import javax.crypto.Cipher;
-
 import static com.example.herchja.teamprojectv2.MainActivity.user;
 
-
+/**
+ * This class handles most, if not all, things related to the sending message window.
+ */
 public class ThirdFragment extends Fragment{
 
     private Button sendmsg;
@@ -60,12 +61,12 @@ public class ThirdFragment extends Fragment{
     public String idTo, idFrom, message, key, timerm;
     public static View v;
 
-
+    // initialize the view on creation
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_third, container, false);
 
-
+        // handle logout functions
         Button logout = (Button) v.findViewById(R.id.logout3);
         logout.setOnClickListener(new View.OnClickListener() {
 
@@ -77,7 +78,6 @@ public class ThirdFragment extends Fragment{
                 final TextView input = new TextView(getContext());
                 input.setTextSize(18);
                 input.setGravity(Gravity.CENTER | Gravity.BOTTOM);
-
                 input.setText("Are you sure you want to logout?");
 
                 MainActivity.alertDialog.setView(input);
@@ -101,27 +101,30 @@ public class ThirdFragment extends Fragment{
             }
         });
 
+        // get each of the boxes for all of the fields in the send messages screen.
         sendto = (EditText) v.findViewById(R.id.editText6);
         timer = (EditText) v.findViewById(R.id.editText5);
         msg = (EditText) v.findViewById(R.id.MsgBox);
         Timerbox = (EditText) v.findViewById(R.id.editText5);
-
-
         sendmsg = (Button) v.findViewById(R.id.button);
+
+        // create listener for the sending messages button
         sendmsg.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
 
-                //send message implementation
+                // get all of the fields from the send messages window.
                 timerm = timer.getText().toString();
                 idTo = sendto.getText().toString();
                 idFrom = user.getUsername();
                 message = msg.getText().toString();
 
+                // create a task to send the message over to the database.
                 key = null;
                 new myAsyncTask().execute();
 
+                // create a successfully message after the execution of the message sending
                 Toast.makeText(getActivity(), "Message has been sent!", Toast.LENGTH_SHORT).show();
                 sendto.setText("");
                 msg.setText("");
@@ -129,20 +132,19 @@ public class ThirdFragment extends Fragment{
             }
         });
 
+        // creating timer box for message timer
         Timerbox.setFocusable(false);
-
         ToggleTimer = (ToggleButton) v.findViewById(R.id.toggleButton);
+
+        // handle the listener
         ToggleTimer.setOnClickListener(new View.OnClickListener() {
 
+            // change true/false for the timer
             @Override
             public void onClick(View view) {
-
-                if(ToggleTimer.isChecked())
-                {
+                if(ToggleTimer.isChecked()) {
                     Timerbox.setFocusableInTouchMode(true);
-                }
-                else
-                {
+                } else {
                     ToggleTimer.setFocusable(false);
                 }
             }
@@ -150,32 +152,38 @@ public class ThirdFragment extends Fragment{
 
         TextView tv = (TextView) v.findViewById(R.id.tvFragThird);
         tv.setText(getArguments().getString("msg"));
-
         return v;
     }
 
-
+    /**
+     * Task for sending a message over to the database
+     */
     class myAsyncTask extends AsyncTask<Void, Void, Void>  {
 
+        /**
+         * This will be running in the background when the send message button is clicked.
+         * @param params
+         * @return
+         */
         protected Void doInBackground(Void... params){
-
-            ArrayList<Message> msg = new ArrayList<Message>();
             ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>();
             byte[] encoded = null;
             byte[] encrypted = null;
-            try {
+
+            try { // handle getting the private key from the database
                 // get the private key from the server
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost("http://54.148.185.237/readPriv.php");
                 HttpResponse response = httpclient.execute(httppost);
                 HttpEntity entity = response.getEntity();
+
+                // read the inputstream from the phpscript and get the private key
                 InputStream is = entity.getContent();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(is, "iso-8859-1"), 8);
                 StringBuilder sb = new StringBuilder();
                 String line = null;
                 while ((line = reader.readLine()) != null)
                     sb.append(line + "\n");
-
                 is.close();
                 String result = sb.toString();
                 String privateKey = result.replaceAll("privateKey", "");
@@ -192,37 +200,25 @@ public class ThirdFragment extends Fragment{
                System.out.println("Error encoding message: " + e.getMessage());
             }
 
+            // store the values into a arraylist hashmap.
             nvp.add(new BasicNameValuePair("toid", idTo));
             nvp.add(new BasicNameValuePair("fromid", idFrom));
             nvp.add(new BasicNameValuePair("text", new String(encoded)));
             nvp.add(new BasicNameValuePair("salt", key));
             nvp.add(new BasicNameValuePair("timer", timerm));
-            InputStream is = null;
 
             try {
+                // create a connection with the server and send the message
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost("http://54.148.185.237/sendMessages.php");
                 httppost.setEntity(new UrlEncodedFormEntity(nvp));
                 HttpResponse response = httpclient.execute(httppost);
-                HttpEntity entity = response.getEntity();
-                is = entity.getContent();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(is, "iso-8859-1"), 8);
-                StringBuilder sb = new StringBuilder();
-                String line = null;
-                while ((line = reader.readLine()) != null)
-                    sb.append(line + "\n");
-
-                is.close();
-                String result = sb.toString();
-
-
             } catch (Exception e) {
                 System.out.println("Error in getting messages: " + e.getMessage());
 
             }
             return null;
         }
-
 
         /**
          * Encrypt the messaage
@@ -236,26 +232,27 @@ public class ThirdFragment extends Fragment{
             cipher.init(Cipher.ENCRYPT_MODE, privateKey);
             return cipher.doFinal(message.getBytes());
         }
-
-
-
     }
 
+    /**
+     * Sets the message name? Not too sure tbh.
+     * @param name
+     */
     public static void setMsg(String name)
     {
         sendto.setText(name);
     }
 
+    /**
+     * Kind of like an initializer, creates a new instance of itself and returns it.
+     * @param text
+     * @return
+     */
     public static ThirdFragment newInstance(String text) {
-
-
         ThirdFragment f = new ThirdFragment();
         Bundle b = new Bundle();
         b.putString("msg", text);
-
         f.setArguments(b);
-
         return f;
     }
-
 }

@@ -48,6 +48,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+/**
+ * This handles the main activity of the application
+ */
 public class MainActivity extends FragmentActivity {
 
 
@@ -63,29 +66,30 @@ public class MainActivity extends FragmentActivity {
     private String username;
     private int wait = 0;
 
-
+    /**
+     * This handles when the back button is pressed on the phone.
+     */
     @Override
     public void onBackPressed() {
-
+        // initialize interface stuff
         alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("Logout");
         final TextView input = new TextView(this);
         input.setTextSize(18);
         input.setGravity(Gravity.CENTER | Gravity.BOTTOM);
-
         input.setText("Are you sure you want to logout?");
 
         alertDialog.setView(input);
         alertDialog.setCancelable(true);
+        // when the user clicks yes when they wanna exit
         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
 
             }
         });
-
+        // when the user clicks no when they wanna exit
         alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
 
@@ -96,38 +100,28 @@ public class MainActivity extends FragmentActivity {
 
     }
 
-
+    /**
+     * This will execute on creation after the user logs into their account.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
         String s = getIntent().getStringExtra("user");
-        try {
+
+        try { // create a new user with the information gained from the login activity.
             user = new User(s);
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(this, "Something went wrong!", Toast.LENGTH_LONG).show();
             System.exit(-1);
         }
+
         SharedPreferences preferences = getApplicationContext().getSharedPreferences(user.getId(), MODE_PRIVATE);
         editor = preferences.edit();
         username = user.getUsername();
-        /*
-        new getTask().execute();
-        while(wait == 0){}
-        try {
-            user.setMessages(mess);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        */
-        //thread implemenation for message refresh when logged in...
-
-        Thread t = new Thread() {
-
+        Thread t = new Thread() { // thread creator for auto-refreshing messages
             @Override
             public void run() {
                 try {
@@ -151,24 +145,28 @@ public class MainActivity extends FragmentActivity {
                 }
             }
         };
-
         t.start();
 
+        // change the page that is currently being viewed.
         pager = (ViewPager) findViewById(R.id.viewPager);
         pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
         pager.setCurrentItem(1);
     }
 
-
-
+    /**
+     * Class for page adaptation.
+     */
     private class MyPagerAdapter extends FragmentPagerAdapter {
-
-
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
 
         }
 
+        /**
+         * Handles which fragment to be displaying
+         * @param pos
+         * @return
+         */
         @Override
         public Fragment getItem(int pos) {
             switch(pos) {
@@ -185,14 +183,17 @@ public class MainActivity extends FragmentActivity {
             return 3;
         }
     }
+
+    /**
+     * Task to run in the background when getting messages and updating messages for the user.
+     */
     class getTask extends AsyncTask<Void, Void, Void> {
         protected Void doInBackground(Void... params) {
-
             ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>();
             nvp.add(new BasicNameValuePair("name", username));
             InputStream is = null;
 
-            try {
+            try { // handles connection with the server to execute a script to get the messages.
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost("http://54.148.185.237/getMessages.php");
                 httppost.setEntity(new UrlEncodedFormEntity(nvp));
@@ -204,14 +205,10 @@ public class MainActivity extends FragmentActivity {
                 String line = null;
                 while ((line = reader.readLine()) != null)
                     sb.append(line + "\n");
-
                 is.close();
                 mess = sb.toString();
-
-
             } catch (Exception e) {
                 System.out.println("Error in getting messages: " + e.getMessage());
-
             }
             wait = 1;
             return null;
