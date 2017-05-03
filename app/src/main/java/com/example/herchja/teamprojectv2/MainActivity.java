@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -11,12 +12,24 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class MainActivity extends FragmentActivity {
 
@@ -28,6 +41,9 @@ public class MainActivity extends FragmentActivity {
     static public SharedPreferences.Editor editor;
     static public AlertDialog.Builder alertDialog;
     static public EditText sendmsg;
+    private String mess;
+    private String username;
+    private int wait = 0;
 
     @Override
     public void onBackPressed() {
@@ -77,20 +93,36 @@ public class MainActivity extends FragmentActivity {
         }
         SharedPreferences preferences = getApplicationContext().getSharedPreferences(user.getId(), MODE_PRIVATE);
         editor = preferences.edit();
-
-        //thread implemenation for message refresh when logged in...
+        username = user.getUsername();
         /*
+        new getTask().execute();
+        while(wait == 0){}
+        try {
+            user.setMessages(mess);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        */
+        //thread implemenation for message refresh when logged in...
+
         Thread t = new Thread() {
 
             @Override
             public void run() {
                 try {
                     while (!isInterrupted()) {
-                        Thread.sleep(1000);
+                        Thread.sleep(5000);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 //user.
+                                new getTask().execute();
+                                while(wait == 0){}
+                                try {
+                                    user.setMessages(mess);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         });
                     }
@@ -100,7 +132,7 @@ public class MainActivity extends FragmentActivity {
         };
 
         t.start();
-        */
+
         pager = (ViewPager) findViewById(R.id.viewPager);
         pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
         pager.setCurrentItem(1);
@@ -130,4 +162,37 @@ public class MainActivity extends FragmentActivity {
             return 3;
         }
     }
+    class getTask extends AsyncTask<Void, Void, Void> {
+        protected Void doInBackground(Void... params) {
+
+            ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>();
+            nvp.add(new BasicNameValuePair("name", username));
+            InputStream is = null;
+
+            try {
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost httppost = new HttpPost("http://54.148.185.237/getMessages.php");
+                httppost.setEntity(new UrlEncodedFormEntity(nvp));
+                HttpResponse response = httpclient.execute(httppost);
+                HttpEntity entity = response.getEntity();
+                is = entity.getContent();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is, "iso-8859-1"), 8);
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+                while ((line = reader.readLine()) != null)
+                    sb.append(line + "\n");
+
+                is.close();
+                mess = sb.toString();
+
+
+            } catch (Exception e) {
+                System.out.println("Error in getting messages: " + e.getMessage());
+
+            }
+            wait = 1;
+            return null;
+        }
+    }
+
 }

@@ -66,7 +66,6 @@ public class FirstFragment extends Fragment {
             subjects.add(String.format("From  -  %-" + (40 - m.getFrom().length()) +"s %20s", m.getFrom(), m.getTimestamp().substring(0,16)));
         }
         listViewAdapter.notifyDataSetChanged();
-        System.out.println("SYSTEMCHECKQ");
     }
 
     @Override
@@ -144,7 +143,6 @@ public class FirstFragment extends Fragment {
                     final TextView txt = (TextView) view.findViewById(R.id.MsgText);
                     txt.setText(user.getMessages().get(position).getText());
                     int countdown = 10000;
-                    int t = user.getMessages().get(position).getTimer();
                     if(user.getMessages().get(position).getTimer() != 0){
                         countdown = 1000 * (user.getMessages().get(position).getTimer());
                     }

@@ -73,16 +73,25 @@ public class User  {
         contactList.remove(ndx);
     }
 
-    public void setMessages(ArrayList<Message> messages) {
-        this.messages = messages;
+    public void setMessages(String s) throws JSONException {
+
+        //this.messages = messages;
+        ArrayList<Message> tempA = new ArrayList<Message>();
+        data = new JSONObject(s);
+        JSONArray raw = data.getJSONArray("messages");
+        for(int i = 0; i < raw.length(); i++){
+            JSONObject mes = raw.getJSONObject(i);
+            Message temp = new Message(Integer.parseInt(mes.getString("id")), Integer.parseInt(this.id),  mes.getString("from"), mes.getString("text"),
+                    mes.getString("time"), mes.getString("salt"), mes.getString("timer"));
+            tempA.add(temp);
+
+        }
+        System.out.println();
+        this.messages = tempA;
     }
 
     public void setContact(String name, int ndx) {
         contactList.set(ndx, name);
-    }
-
-    public void setUsername(String name) {
-        this.username = name;
     }
 
     public void setId(String id) {
