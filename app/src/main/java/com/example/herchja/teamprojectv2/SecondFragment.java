@@ -65,9 +65,7 @@ public class SecondFragment extends Fragment {
                 MainActivity.alertDialog .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
-                        Intent intent = new Intent(getContext(), LoginActivity.class);
-                        startActivity(intent);
-
+                        LoginActivity.restart(getContext(),0);
                     }
                 });
 

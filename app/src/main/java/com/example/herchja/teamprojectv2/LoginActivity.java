@@ -1,5 +1,8 @@
 package com.example.herchja.teamprojectv2;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +28,20 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
 
     private EditText Name, Username, Password, Password2;
     private byte[] salt;
+
+    public static void restart(Context context, int delay) {
+        if (delay == 0) {
+            delay = 1;
+        }
+        Intent restartIntent = context.getPackageManager()
+                .getLaunchIntentForPackage(context.getPackageName() );
+        PendingIntent intent = PendingIntent.getActivity(
+                context, 0,
+                restartIntent, PendingIntent.FLAG_ONE_SHOT);
+        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        manager.set(AlarmManager.RTC, System.currentTimeMillis() + delay, intent);
+        System.exit(0);
+    }
 
     /**
      * Execute this function when this is first created.
