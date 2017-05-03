@@ -40,12 +40,21 @@ public class User {
     private String publicKey;
     private PublicKey pubKey = null;
 
+    /**
+     * Constructor
+     * @param username
+     * @param id
+     */
     public User(String username, String id){
         this.username = username;
         this.id = id;
     }
 
-
+    /** Constructor
+     *
+     * @param s
+     * @throws JSONException
+     */
     public User(String s) throws JSONException {
         messages = new ArrayList<Message>();
         data = new JSONObject(s);
@@ -61,16 +70,19 @@ public class User {
             contactList = new ArrayList<String>(Arrays.asList(cont.split(" ")));
         }
         contactList.add(0, "+ Add contact");
+
+        // Create a task to get the public key from the database and wait for it to finish.
         myAsyncTask task = new myAsyncTask();
         try {
             Object result = task.execute().get();
         } catch (Exception e) {
 
         }
+        // get the public key after execution is done.
         publicKey = task.onPostExecute();
 
 
-        try {
+        try { // convert the string key from the db over to a publicKey
             byte[] privateBytes = Base64.decodeBase64(publicKey.getBytes());
             X509EncodedKeySpec keySpec = new X509EncodedKeySpec(privateBytes);
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
@@ -85,12 +97,13 @@ public class User {
             // Decode the message here! holy shit this is hard
             String encryptedText = mes.getString("text");
             String text = null;
-            try {
+            try { // decrypt the message for display
                 text = decrypt(pubKey, encryptedText);
             } catch (Exception e) {
                 System.out.println("Error decrypting key: " + e.getMessage());
             }
 
+            // store the messages into an arraylist.
             Message temp = new Message(Integer.parseInt(mes.getString("id")), Integer.parseInt(this.id),  mes.getString("from"), text,
                     mes.getString("time"), mes.getString("salt"), mes.getString("timer"));
             messages.add(temp);
@@ -99,6 +112,13 @@ public class User {
         System.out.println();
     }
 
+    /**
+     *  Decrypt the message using a key from the database.
+     * @param publicKey
+     * @param encryptedText
+     * @return
+     * @throws Exception
+     */
     public String decrypt(PublicKey publicKey, String encryptedText) throws Exception {
         byte[] bytes = Base64.decodeBase64(encryptedText.getBytes());
         Cipher cipher = Cipher.getInstance("RSA");
@@ -107,6 +127,10 @@ public class User {
         return new String(decryptedText);
     }
 
+    /**
+     * convert to string.
+     * @return
+     */
     public String toString()
     {
         if(this.getId() != "") {
@@ -118,6 +142,7 @@ public class User {
         }
     }
 
+    // setters and getters for a bunch of stuff here...
     public String getUsername() {
         return username;
     }
@@ -134,21 +159,27 @@ public class User {
         contactList.remove(ndx);
     }
 
+    /**
+     * Used to update the messages when refreshing.
+     * @param s
+     * @throws JSONException
+     */
     public void setMessages(String s) throws JSONException {
 
         //this.messages = messages;
         ArrayList<Message> tempA = new ArrayList<Message>();
         data = new JSONObject(s);
         JSONArray raw = data.getJSONArray("messages");
-        for(int i = 0; i < raw.length(); i++){
+        for(int i = 0; i < raw.length(); i++){ // checking the length of the db messages
             JSONObject mes = raw.getJSONObject(i);
             String encryptedText = mes.getString("text");
             String text = null;
-            try {
+            try { // decrypt the text
                 text = decrypt(pubKey, encryptedText);
             } catch (Exception e) {
                 System.out.println("Error decrypting message: " + e.getMessage());
             }
+            // store the text into an array list
             Message temp = new Message(Integer.parseInt(mes.getString("id")), Integer.parseInt(this.id),  mes.getString("from"), text,
                     mes.getString("time"), mes.getString("salt"), mes.getString("timer"));
             tempA.add(temp);
@@ -158,6 +189,7 @@ public class User {
         this.messages = tempA;
     }
 
+    // more setters and getters
     public void setContact(String name, int ndx) {
         contactList.set(ndx, name);
     }
@@ -181,36 +213,39 @@ public class User {
         messages.remove(ndx);
     }
 
+    /**
+     * AsyncTask to run a HTTP call over to the server to run a php script, and get the
+     * results of it. This is mainly to get the public key from the database.
+     */
     class myAsyncTask extends AsyncTask<String, String, String> {
-        public String publicKey = null;
+        public String publicKey = null;     // public key from database in string format.
+
+        /**
+         * Run this when you first create a new task.
+         * @param params
+         * @return
+         */
         @Override
         protected String doInBackground(String... params){
-
             try {
                 // get the private key from the server
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost("http://54.148.185.237/readPub.php");
                 HttpResponse response = httpclient.execute(httppost);
                 HttpEntity entity = response.getEntity();
+
+                // read the data from the php script that was executed.
                 InputStream is = entity.getContent();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(is, "iso-8859-1"), 8);
                 StringBuilder sb = new StringBuilder();
                 String line = null;
                 while ((line = reader.readLine()) != null)
                     sb.append(line + "\n");
-
                 is.close();
                 String result = sb.toString();
 
                 // get the message by decryption
                 publicKey = result.replaceAll("publicKey", "");
-
-                /*byte[] privateBytes = Base64.decodeBase64(publicKey.getBytes());
-
-                X509EncodedKeySpec keySpec = new X509EncodedKeySpec(privateBytes);
-                KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-                PublicKey pubKey = keyFactory.generatePublic(keySpec);*/
-
 
             } catch (Exception e) {
                 System.out.println("Error with getting message decryption:" + e.getMessage());
@@ -218,24 +253,9 @@ public class User {
             return publicKey;
         }
 
+        // after the execution is done, this method will return the public key.
         protected String onPostExecute() {
             return publicKey;
-
-        }
-
-
-        /**
-         *  Decrypt the message given a public key.
-         * @param publicKey
-         * @param encrypted
-         * @return
-         * @throws Exception
-         */
-        public String decrypt(PublicKey publicKey, byte [] encrypted) throws Exception {
-            Cipher cipher = Cipher.getInstance("RSA");
-            cipher.init(Cipher.DECRYPT_MODE, publicKey);
-            return new String(cipher.doFinal(encrypted));
         }
     }
-
 }
