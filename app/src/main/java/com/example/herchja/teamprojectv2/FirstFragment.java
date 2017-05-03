@@ -62,6 +62,7 @@ public class FirstFragment extends Fragment {
     }
 
     private void updateLists(){
+        subjects.clear();
         for(Message m : user.getMessages()){
             subjects.add(String.format("From  -  %-" + (40 - m.getFrom().length()) +"s %20s", m.getFrom(), m.getTimestamp().substring(0,16)));
         }
