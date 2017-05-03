@@ -16,7 +16,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-<<<<<<< HEAD
 import com.kosalgeek.asynctask.AsyncResponse;
 import com.kosalgeek.asynctask.PostResponseAsyncTask;
 
@@ -33,8 +32,7 @@ import java.util.regex.Pattern;
 
 import javax.crypto.Cipher;
 
-public class MainActivity extends FragmentActivity{
-=======
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -51,7 +49,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class MainActivity extends FragmentActivity {
->>>>>>> refs/remotes/origin/master
+
 
     static public ViewPager pager;
     static public int userChooser;
