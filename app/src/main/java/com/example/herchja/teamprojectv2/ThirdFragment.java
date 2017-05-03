@@ -185,8 +185,8 @@ public class ThirdFragment extends Fragment{
                 byte[] privateBytes = Base64.decodeBase64(privateKey.getBytes());
                 PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateBytes);
                 KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-                PrivateKey pubKey = keyFactory.generatePrivate(keySpec);
-                encrypted = encrypt(pubKey, message);
+                PrivateKey privKey = keyFactory.generatePrivate(keySpec);
+                encrypted = encrypt(privKey, message);
                 encoded = Base64.encodeBase64(encrypted);
             } catch (Exception e) {
                System.out.println("Error encoding message: " + e.getMessage());
@@ -223,17 +223,6 @@ public class ThirdFragment extends Fragment{
             return null;
         }
 
-        /**
-         *  Generate a key pair
-         * @return newly generated key pair
-         * @throws NoSuchAlgorithmException
-         */
-        public KeyPair buildKeyPair() throws NoSuchAlgorithmException {
-            final int keySize = 2048;
-            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-            keyPairGenerator.initialize(keySize);
-            return keyPairGenerator.genKeyPair();
-        }
 
         /**
          * Encrypt the messaage
@@ -248,19 +237,7 @@ public class ThirdFragment extends Fragment{
             return cipher.doFinal(message.getBytes());
         }
 
-        /**
-         *  Decrypt the message given a public key.
-         * @param publicKey
-         * @param encrypted
-         * @return
-         * @throws Exception
-         */
-        public byte[] decrypt(PublicKey publicKey, byte [] encrypted) throws Exception {
-            Cipher cipher = Cipher.getInstance("RSA");
-            cipher.init(Cipher.DECRYPT_MODE, publicKey);
 
-            return cipher.doFinal(encrypted);
-        }
 
     }
 

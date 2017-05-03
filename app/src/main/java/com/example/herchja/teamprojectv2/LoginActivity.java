@@ -53,9 +53,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
      */
     @Override
     public void processFinish(String s) {
-        if (s.contains("salt")) { // if the php script is handling the readsalt
-            Pattern p = Pattern.compile("salt");
-            Matcher m = p.matcher(s);
+        if (s.contains("salt") && salt == null) { // if the php script is handling the readsalt
             s = s.replaceAll("salt", "");
             salt = s.getBytes();
         } else if (s.equals("registered")) { // handles the registration of a new user
