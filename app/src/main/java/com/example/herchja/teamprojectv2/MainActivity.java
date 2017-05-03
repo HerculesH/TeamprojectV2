@@ -79,8 +79,7 @@ public class MainActivity extends FragmentActivity {
         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
 
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
+                LoginActivity.restart(getApplicationContext(),0);
 
             }
         });
