@@ -54,10 +54,7 @@ public class MainActivity extends FragmentActivity {
     static public ViewPager pager;
     static public int userChooser;
     static public User user;
-    static public String save;
-    static public SharedPreferences.Editor editor;
     static public AlertDialog.Builder alertDialog;
-    static public EditText sendmsg;
     private String mess;
     private String username;
     private int wait = 0;
@@ -154,7 +151,6 @@ public class MainActivity extends FragmentActivity {
         pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
         pager.setCurrentItem(1);
     }
-
 
 
     private class MyPagerAdapter extends FragmentPagerAdapter {
