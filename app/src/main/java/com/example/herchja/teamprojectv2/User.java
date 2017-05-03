@@ -25,6 +25,8 @@ import java.util.Arrays;
 
 import javax.crypto.Cipher;
 
+import static org.apache.commons.codec.CharEncoding.UTF_8;
+
 /**
  * Created by akenf on 4/17/2017.
  */
@@ -59,7 +61,14 @@ public class User {
             contactList = new ArrayList<String>(Arrays.asList(cont.split(" ")));
         }
         contactList.add(0, "+ Add contact");
-        publicKey = new myAsyncTask().onPostExecute();
+        myAsyncTask task = new myAsyncTask();
+        try {
+            Object result = task.execute().get();
+        } catch (Exception e) {
+
+        }
+        publicKey = task.onPostExecute();
+
 
         try {
             byte[] privateBytes = Base64.decodeBase64(publicKey.getBytes());
@@ -89,11 +98,13 @@ public class User {
         }
         System.out.println();
     }
+
     public String decrypt(PublicKey publicKey, String encryptedText) throws Exception {
         byte[] bytes = Base64.decodeBase64(encryptedText.getBytes());
         Cipher cipher = Cipher.getInstance("RSA");
         cipher.init(Cipher.DECRYPT_MODE, publicKey);
-        return new String(cipher.doFinal(bytes));
+        byte[] decryptedText = cipher.doFinal(bytes);
+        return new String(decryptedText);
     }
 
     public String toString()
