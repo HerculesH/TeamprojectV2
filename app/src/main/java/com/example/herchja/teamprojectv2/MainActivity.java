@@ -16,6 +16,23 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kosalgeek.asynctask.AsyncResponse;
+import com.kosalgeek.asynctask.PostResponseAsyncTask;
+
+import org.json.JSONException;
+
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.crypto.Cipher;
+
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -33,6 +50,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends FragmentActivity {
 
+
     static public ViewPager pager;
     static public int userChooser;
     static public SharedPreferencesHandler pref = new SharedPreferencesHandler();
@@ -44,6 +62,7 @@ public class MainActivity extends FragmentActivity {
     private String mess;
     private String username;
     private int wait = 0;
+
 
     @Override
     public void onBackPressed() {
@@ -83,6 +102,8 @@ public class MainActivity extends FragmentActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         String s = getIntent().getStringExtra("user");
         try {
             user = new User(s);
@@ -137,6 +158,8 @@ public class MainActivity extends FragmentActivity {
         pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
         pager.setCurrentItem(1);
     }
+
+
 
     private class MyPagerAdapter extends FragmentPagerAdapter {
 
