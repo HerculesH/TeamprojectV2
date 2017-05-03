@@ -62,11 +62,11 @@ public class FirstFragment extends Fragment {
     }
 
     private void updateLists(){
+        subjects.clear();
         for(Message m : user.getMessages()){
             subjects.add(String.format("From  -  %-" + (40 - m.getFrom().length()) +"s %20s", m.getFrom(), m.getTimestamp().substring(0,16)));
         }
         listViewAdapter.notifyDataSetChanged();
-        System.out.println("SYSTEMCHECKQ");
     }
 
     @Override
@@ -144,7 +144,6 @@ public class FirstFragment extends Fragment {
                     final TextView txt = (TextView) view.findViewById(R.id.MsgText);
                     txt.setText(user.getMessages().get(position).getText());
                     int countdown = 10000;
-                    int t = user.getMessages().get(position).getTimer();
                     if(user.getMessages().get(position).getTimer() != 0){
                         countdown = 1000 * (user.getMessages().get(position).getTimer());
                     }
@@ -181,10 +180,15 @@ public class FirstFragment extends Fragment {
                     MainActivity.alertDialog.setNegativeButton("Reply", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
 
-                            //MainActivity.sendmsg = (EditText) MainActivity.v.findViewById(R.id.editText6);
-                            final EditText sendmsg = (EditText) ThirdFragment.v.findViewById(R.id.editText6);
-                            sendmsg.setText("test");
-                            MainActivity.pager.setCurrentItem(2,true);
+                            SecondFragment.sendmsg(user.getMessages().get(position).getFrom());
+                            ThirdFragment.setMsg(user.getMessages().get(position).getFrom());
+
+                            idMes = user.getMessages().get(position).getId();
+                            user.remMessage(position);
+                            subjects.remove(position);
+                            new delTask().execute();
+                            listViewAdapter.notifyDataSetChanged();
+                            numberOfContacts.setText(user.getMessages().size() + " Messages");
 
                         }
                     });
@@ -194,12 +198,6 @@ public class FirstFragment extends Fragment {
         });
 
         return first;
-    }
-
-    public void refreshFrag()
-    {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.detach(this).attach(this).commit();
     }
 
     public static FirstFragment newInstance(String text) {
