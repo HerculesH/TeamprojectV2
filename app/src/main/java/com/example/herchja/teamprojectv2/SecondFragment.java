@@ -109,8 +109,6 @@ public class SecondFragment extends Fragment {
 
                             final EditText name = (EditText) view.findViewById(R.id.eName);
                             String nameUser = name.getText().toString();
-                            final EditText id = (EditText) view.findViewById(R.id.eID);
-                            String idUser = id.getText().toString();
                             listViewAdapter.add(nameUser);
                             listViewAdapter.notifyDataSetChanged();
                             cmd = "new";
@@ -139,10 +137,7 @@ public class SecondFragment extends Fragment {
                     MainActivity.userChooser = position;
                     final EditText setName = (EditText) view.findViewById(R.id.viewCname);
                     setName.setText(user.getContactList().get(position));
-                    final EditText setId = (EditText) view.findViewById(R.id.viewCid);
-                    setId.setText("0");
                     setName.setFocusable(false);
-                    setId.setFocusable(false);
 
                     final ToggleButton edit = (ToggleButton) view.findViewById(R.id.toggleButton2);
                     edit.setOnClickListener(new View.OnClickListener() {
@@ -153,7 +148,6 @@ public class SecondFragment extends Fragment {
                             if(edit.isChecked())
                             {
                                 setName.setFocusableInTouchMode(true);
-                                setId.setFocusableInTouchMode(true);
                             }
                             else
                             {
@@ -164,7 +158,6 @@ public class SecondFragment extends Fragment {
                                 new contactTask().execute();
 
                                 setName.setFocusable(false);
-                                setId.setFocusable(false);
                             }
                         }
                     });
