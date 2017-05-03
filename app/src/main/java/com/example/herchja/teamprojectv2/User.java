@@ -16,16 +16,12 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.KeyFactory;
-import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.crypto.Cipher;
-
-import static org.apache.commons.codec.CharEncoding.UTF_8;
 
 /**
  * Created by akenf on 4/17/2017.
@@ -166,7 +162,6 @@ public class User {
      */
     public void setMessages(String s) throws JSONException {
 
-        //this.messages = messages;
         ArrayList<Message> tempA = new ArrayList<Message>();
         data = new JSONObject(s);
         JSONArray raw = data.getJSONArray("messages");
@@ -183,7 +178,6 @@ public class User {
             Message temp = new Message(Integer.parseInt(mes.getString("id")), Integer.parseInt(this.id),  mes.getString("from"), text,
                     mes.getString("time"), mes.getString("salt"), mes.getString("timer"));
             tempA.add(temp);
-
         }
         System.out.println();
         this.messages = tempA;

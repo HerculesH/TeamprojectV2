@@ -16,23 +16,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.kosalgeek.asynctask.AsyncResponse;
-import com.kosalgeek.asynctask.PostResponseAsyncTask;
-
-import org.json.JSONException;
-
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.crypto.Cipher;
-
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -121,7 +104,9 @@ public class MainActivity extends FragmentActivity {
         SharedPreferences preferences = getApplicationContext().getSharedPreferences(user.getId(), MODE_PRIVATE);
         editor = preferences.edit();
         username = user.getUsername();
-        Thread t = new Thread() { // thread creator for auto-refreshing messages
+
+        Thread t = new Thread() {
+
             @Override
             public void run() {
                 try {
@@ -159,7 +144,6 @@ public class MainActivity extends FragmentActivity {
     private class MyPagerAdapter extends FragmentPagerAdapter {
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
-
         }
 
         /**
