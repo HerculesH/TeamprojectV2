@@ -28,6 +28,7 @@ public class User  {
         this.username = data.getJSONArray("user").getJSONObject(0).getString("name");
         this.id = data.getJSONArray("user").getJSONObject(0).getString("id");
 
+        // get the contact list for the user
         JSONArray raw = data.getJSONArray("user");
         JSONObject contacts = raw.getJSONObject(1);
         String cont = contacts.getString("contacts");
@@ -36,6 +37,8 @@ public class User  {
             contactList = new ArrayList<String>(Arrays.asList(cont.split(" ")));
         }
         contactList.add(0, "+ Add contact");
+
+        // gets all the messages for the user
         for(int i = 2; i < raw.length(); i++){
             JSONObject mes = raw.getJSONObject(i);
             Message temp = new Message(Integer.parseInt(mes.getString("id")), Integer.parseInt(this.id),  mes.getString("from"), mes.getString("text"),

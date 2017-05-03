@@ -16,6 +16,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.kosalgeek.asynctask.AsyncResponse;
+import com.kosalgeek.asynctask.PostResponseAsyncTask;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -29,18 +32,24 @@ import org.apache.http.message.BasicNameValuePair;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.security.KeyFactory;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.RSAPrivateKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.HashMap;
+
 import javax.crypto.Cipher;
 
 import static com.example.herchja.teamprojectv2.MainActivity.user;
 
 
-public class ThirdFragment extends Fragment {
+public class ThirdFragment extends Fragment{
 
     private Button sendmsg;
     private ToggleButton ToggleTimer;
@@ -51,9 +60,11 @@ public class ThirdFragment extends Fragment {
     public String idTo, idFrom, message, key, timerm;
     public static View v;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_third, container, false);
+
 
         Button logout = (Button) v.findViewById(R.id.logout3);
         logout.setOnClickListener(new View.OnClickListener() {
@@ -94,6 +105,7 @@ public class ThirdFragment extends Fragment {
         timer = (EditText) v.findViewById(R.id.editText5);
         msg = (EditText) v.findViewById(R.id.MsgBox);
         Timerbox = (EditText) v.findViewById(R.id.editText5);
+
 
         sendmsg = (Button) v.findViewById(R.id.button);
         sendmsg.setOnClickListener(new View.OnClickListener() {
@@ -143,7 +155,8 @@ public class ThirdFragment extends Fragment {
     }
 
 
-    class myAsyncTask extends AsyncTask<Void, Void, Void> {
+    class myAsyncTask extends AsyncTask<Void, Void, Void>  {
+
         protected Void doInBackground(Void... params){
 
             ArrayList<Message> msg = new ArrayList<Message>();
@@ -151,14 +164,34 @@ public class ThirdFragment extends Fragment {
             byte[] encoded = null;
             byte[] encrypted = null;
             try {
-                KeyPair keyPair = buildKeyPair();
-                PublicKey pubKey = keyPair.getPublic();
-                PrivateKey privateKey = keyPair.getPrivate();
-                encrypted = encrypt(privateKey, message);
+                // get the private key from the server
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost httppost = new HttpPost("http://54.148.185.237/readPriv.php");
+                HttpResponse response = httpclient.execute(httppost);
+                HttpEntity entity = response.getEntity();
+                InputStream is = entity.getContent();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is, "iso-8859-1"), 8);
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+                while ((line = reader.readLine()) != null)
+                    sb.append(line + "\n");
+
+                is.close();
+                String result = sb.toString();
+                String privateKey = result.replaceAll("privateKey", "");
+
+                // generate the encoding of the private key with the message.
+                // please kill me this is disgustingly hard
+                byte[] privateBytes = Base64.decodeBase64(privateKey.getBytes());
+                PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateBytes);
+                KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+                PrivateKey pubKey = keyFactory.generatePrivate(keySpec);
+                encrypted = encrypt(pubKey, message);
                 encoded = Base64.encodeBase64(encrypted);
             } catch (Exception e) {
-                System.out.println("Error in encrypting message");
+               System.out.println("Error encoding message: " + e.getMessage());
             }
+
             nvp.add(new BasicNameValuePair("toid", idTo));
             nvp.add(new BasicNameValuePair("fromid", idFrom));
             nvp.add(new BasicNameValuePair("text", new String(encoded)));
@@ -237,6 +270,7 @@ public class ThirdFragment extends Fragment {
     }
 
     public static ThirdFragment newInstance(String text) {
+
 
         ThirdFragment f = new ThirdFragment();
         Bundle b = new Bundle();

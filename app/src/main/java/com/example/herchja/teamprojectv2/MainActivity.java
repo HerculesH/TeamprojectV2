@@ -16,9 +16,23 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kosalgeek.asynctask.AsyncResponse;
+import com.kosalgeek.asynctask.PostResponseAsyncTask;
+
 import org.json.JSONException;
 
-public class MainActivity extends FragmentActivity {
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.crypto.Cipher;
+
+public class MainActivity extends FragmentActivity{
 
     static public ViewPager pager;
     static public int userChooser;
@@ -28,6 +42,7 @@ public class MainActivity extends FragmentActivity {
     static public SharedPreferences.Editor editor;
     static public AlertDialog.Builder alertDialog;
     static public EditText sendmsg;
+
 
     @Override
     public void onBackPressed() {
@@ -67,6 +82,8 @@ public class MainActivity extends FragmentActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         String s = getIntent().getStringExtra("user");
         try {
             user = new User(s);
@@ -105,6 +122,8 @@ public class MainActivity extends FragmentActivity {
         pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
         pager.setCurrentItem(1);
     }
+
+
 
     private class MyPagerAdapter extends FragmentPagerAdapter {
 
